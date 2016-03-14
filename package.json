@@ -1,0 +1,37 @@
+{
+  "name": "ostrio-analytics",
+  "version": "1.0.0",
+  "description": "Visitor's analytics tracking code for ostr.io service",
+  "main": "./src/analytics.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/VeliovGroup/ostrio-analytics.git"
+  },
+  "keywords": [
+    "middleware",
+    "spiderable",
+    "crawlble",
+    "prerender",
+    "ajax",
+    "seo",
+    "pushstate",
+    "angular",
+    "backbone",
+    "emberjs",
+    "meteor",
+    "meteorjs",
+    "express",
+    "connect",
+    "http",
+    "https"
+  ],
+  "author": "Dmitriy A. (http://veliovgroup.com)",
+  "license": "BSD 3-Clause",
+  "bugs": {
+    "url": "https://github.com/VeliovGroup/ostrio-analytics/issues"
+  },
+  "homepage": "https://github.com/VeliovGroup/ostrio-analytics"
+}
