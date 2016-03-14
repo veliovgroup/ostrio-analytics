@@ -37,7 +37,7 @@ Installation
 In control panel of your website (*at [ostr.io](https://ostr.io/en/account/servers)*) go to "Analytics" tab, and click on "How to install?". From given code you can obtain `websiteId` (*17 symbols*):
 ```html
 <script async defer type="text/javascript" src="https://analytics.ostr.io/Asy4kHJndi84KKlpq.js"></script>
-<!-- serverId is: Asy4kHJndi84KKlpq -->
+<!-- websiteId is: Asy4kHJndi84KKlpq -->
 ```
 
 The simplest way is to include this `script` tag into `head` of your HTML page. Or (*for better efficiency*) include code from this repository into main website's script file (or install via NPM/Atmosphere), so you can have all website-related code in single file.
@@ -57,8 +57,8 @@ Or if you're using any compilation for NPM and/or JavaScript, all JS-source code
 Usage
 =======
 
-##### Constructor `new OstrioTrackerClass(serverId)`
- - `serverId` {*String*} - [Required] Server identification. For finding serverId see "Installation" section above
+##### Constructor `new OstrioTrackerClass(websiteId)`
+ - `websiteId` {*String*} - [Required] Website identifier. For finding websiteId see "Installation" section above
 
 For Meteor:
 ```js
