@@ -1,7 +1,7 @@
 Analytics for [ostr.io](https://ostr.io)
 =======
 
-[Ostr.io](https://ostr.io) provides lightweight and full-featured website visitor's analytics.
+[Ostr.io](https://ostr.io) provides lightweight and full-featured visitor's analytics for websites.
 
 Analytics includes:
   - Real-time users;
@@ -40,7 +40,7 @@ In control panel of your website (*at [ostr.io](https://ostr.io/en/account/serve
 <!-- websiteId is: Asy4kHJndi84KKlpq -->
 ```
 
-The simplest way is to include this `script` tag into `head` of your HTML page. Or (*for better efficiency*) include code from this repository into main website's script file (or install via NPM/Atmosphere), so you can have all website-related code in single file.
+The simplest way is to include this `script` tag into `head` of your HTML page. Or (*for better efficiency*) include code from this repository into main website's script file (or install via NPM/Atmosphere), so you can have all application's code in single file.
 
 ##### Meteor
 ```shell
@@ -52,7 +52,7 @@ meteor add ostrio:analytics
 npm install ostrio-analytics --save
 ```
 
-Or if you're using any compilation for NPM and/or JavaScript, all JS-source code of your application will be compiled and minified into single file.
+If you're using any compilation for NPM and/or JavaScript, all JS-source code of your application will be compiled and minified into single file.
 
 Usage
 =======
@@ -63,7 +63,7 @@ Usage
 For Meteor:
 ```js
 Meteor.startup(function() {
-  this.OstrioTracker = new OstrioTrackerClass('yGicWg6G7XWM4avuJ');
+  this.OstrioTracker = new OstrioTrackerClass('Asy4kHJndi84KKlpq');
 });
 ```
 
@@ -76,15 +76,15 @@ var OstrioTracker = new OstrioTrackerClass('Asy4kHJndi84KKlpq');
 
 
 ##### `OstrioTracker.pushEvent(key, value)`
-*Custom events is useful for tracking certain activity on your website, like clicks, form submissions and other user's behaviors.*
+Custom events is useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
 
  - `key` {*String*} - [Required] Length of event key must be between 1 and 24 symbols
  - `value` {*String*} - [Required] Length of event value must be between 1 and 64 symbols
 
-*If length of* `key` *or* `value` *is higher than limits, it will be truncated without throwing exception.*
+If length of `key` or `value` is higher than limits, it will be truncated without throwing exception.
 
 
 ##### `OstrioTracker.track()`
-*Use to manually send tracking info of current page and user to ostr.io analytics service.*
+Use to manually send tracking info of current page and user, to ostr.io analytics service.
 
 
