@@ -1,8 +1,8 @@
 {
   "name": "ostrio-analytics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Visitor's analytics tracking code for ostr.io service",
-  "main": "./src/analytics.js",
+  "main": "./lib/analytics.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
