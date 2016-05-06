@@ -1,6 +1,6 @@
 {
   "name": "ostrio-analytics",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Visitor's analytics tracking code for ostr.io service",
   "main": "./lib/analytics.js",
   "scripts": {
@@ -25,8 +25,8 @@
     "bounce rate",
     "ostr.io"
   ],
-  "author": "Dmitriy A. (http://veliovgroup.com)",
-  "license": "BSD 3-Clause",
+  "author": "Dmitriy A. (https://veliovgroup.com)",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/VeliovGroup/ostrio-analytics/issues"
   },
