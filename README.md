@@ -77,6 +77,8 @@ RequireJS (+AMD Module):
 ```js
 var Analytics = require('ostrio-analytics');
 var OstrioTracker = new Analytics('trackingId');
+// Alternative one-liner:
+new (require('ostrio-analytics'))('trackingId');
 ```
 
 *From this point you're good to go. All visitor's actions will be collected by ostr.io analytics. For custom events - see below.*
