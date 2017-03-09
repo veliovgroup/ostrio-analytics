@@ -66,9 +66,17 @@ npm install ostrio-analytics --save
 Usage
 =======
 
-#### Constructor `new OstrioTrackerClass(trackingId [, auto])`
+#### Constructor `new Analytics(trackingId [, auto])`
  - `trackingId` {*String*} - [Required] Website identifier. To obtain `trackingId` see "Installation" section above;
  - `auto` - {*Boolean*} - [Optional] Default - `true`. If set to `false` all visit and actions have to be tracked with `.track()` method, see below.
+
+Script Tag:
+```js
+// After including script-tag
+// Analytics automatically executes in 'auto' mode
+// Its instance is available in global-scope as OstrioTracker
+// Example: OstrioTracker.pushEvent(foo, bar);
+```
 
 Meteor:
 ```jsx
