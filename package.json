@@ -1,7 +1,7 @@
 {
   "name": "ostrio-analytics",
-  "version": "1.1.1",
-  "description": "Visitor's analytics tracking code for ostr.io service",
+  "version": "1.1.2",
+  "description": "Visitor's web analytics tracking code for ostr.io service",
   "main": "./lib/analytics.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,18 +11,21 @@
     "url": "git://github.com/VeliovGroup/ostrio-analytics.git"
   },
   "keywords": [
-    "analytics",
-    "website",
-    "visitor",
-    "tracking",
     "activity",
-    "pageviews",
-    "sessions",
-    "events",
-    "demographics",
+    "analytics",
     "behavior",
+    "demographics",
+    "events",
+    "metrics",
+    "ostr.io",
+    "page views",
+    "pageviews",
     "real-time",
-    "ostr.io"
+    "sessions",
+    "tracking",
+    "visitor",
+    "web",
+    "website"
   ],
   "author": "Dmitriy A. (https://veliovgroup.com)",
   "license": "BSD-3-Clause",
