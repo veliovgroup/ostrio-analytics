@@ -99,8 +99,8 @@ const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 ##### `analyticsTracker.pushEvent(key, value)`
 Custom events are useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
 
- - `key` {*String*} - [Required] Length of the event key must be between 1 and 24 symbols;
- - `value` {*String*} - [Required] Length of the event value must be between 1 and 64 symbols.
+ - `key` {*String*} - [Required] The length of the event key must be between 1 and 24 symbols;
+ - `value` {*String*} - [Required] The length of the event value must be between 1 and 64 symbols.
 
 If the length of `key` or `value` is longer than limits, it will be truncated without throwing an exception.
 
