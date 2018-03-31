@@ -4,6 +4,10 @@
     "browser": true
   },
   "extends": "eslint:recommended",
+  "globals": {
+    "Npm": true,
+    "Package": true
+  },
   "rules": {
     "strict": [2, "never"],
     "no-shadow": 2,
