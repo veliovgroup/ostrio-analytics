@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:analytics',
-  version: '1.2.3',
+  version: '1.2.4',
   summary: 'Visitor\'s web analytics tracking code for ostr.io service',
   git: 'https://github.com/VeliovGroup/ostrio-analytics',
   documentation: 'README.md'
@@ -13,5 +13,5 @@ Package.onUse(function(api) {
 });
 
 Npm.depends({
-  'ostrio-analytics': '1.1.3'
+  'ostrio-analytics': '1.1.4'
 });
