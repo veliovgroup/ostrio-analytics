@@ -1,76 +1,90 @@
-Analytics for [ostr.io](https://ostr.io)
-=======
+# Analytics for [ostr.io](https://ostr.io)
 
-[Ostr.io](https://ostr.io) provides lightweight and full-featured visitor's analytics for websites. Our solution fully compatible and works *out of the box* with Meteor, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
+[ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with Meteor, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
 
-#### Why [ostr.io](https://ostr.io) analytics?:
-  - Open Source tracking code;
-  - Transparent data collection;
-  - Support for History API (*HTML5 History Management*);
-  - Support all JavaScript front-end based frameworks and routings;
-  - Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
-  - Lightweight, less than 2.5KB;
-  - No DOM changes;
-  - No heavy CPU tasks;
-  - No extra scripts loading;
-  - Fast, all metrics are available in real time;
-  - Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Events" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
+## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
-#### Analytics includes:
-  - Real-time users;
-  - Pageviews;
-  - Sessions;
-  - Unique users;
-  - Demographics:
-    - Country;
-    - City.
-  - System:
-    - Mobile devices;
-    - Browsers;
-    - Operating System.
-  - Behavior:
-    - Custom events (*see below*);
-    - Global Scripts Errors and Exceptions;
-    - Referrers.
+- Open Source tracking code;
+- Transparent data collection;
+- Support for History API (*HTML5 History Management*);
+- Support most of JavaScript front-end based frameworks and routings;
+- Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
+- Follows latest GDPR recommendations;
+- Easy opt-out procedure for end-users;
+- Lightweight, less than 2.5KB;
+- No DOM changes;
+- No heavy CPU tasks;
+- No extra scripts loading;
+- Fast, all metrics are available in real-time;
+- Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
 
-Installation
-=======
+## Analytics includes:
+
+- Real-time users;
+- Pageviews;
+- Sessions;
+- Unique users;
+- Demographics:
+  - Country;
+  - City.
+- System:
+  - Mobile devices;
+  - Browsers;
+  - Operating System.
+- Behavior:
+  - Custom events (*see below*);
+  - Referrers.
+- Global Scripts Errors and Exceptions:
+  - Catch all JS-runtime errors and exceptions;
+  - Browser name and release;
+  - Operating System name and release;
+  - Device name and version;
+  - Script name and line number where the error occurred.
+
+## Installation
+
 Installation options:
- - Include suggested `script` tag into `head` of your HTML page - The simplest way;
- - Include code from this repository into main website' script file;
- - Install via NPM;
- - Install via Atmosphere (Meteor).
 
-To find installation instruction - go to [Analytics](https://ostr.io/service/analytics) section and select domain name for which you would like to install visitors metrics. To find "trackingId" click on "Show integration guide" and pick `trackingId` (*17 symbols*).
+- Include suggested `script` tag into `head` of your HTML page - The simplest way;
+- Include code from this repository into main website' script file;
+- Install via NPM;
+- Install via Atmosphere (Meteor).
 
-#### Script tag:
+To find installation instruction - go to [Analytics](https://ostr.io/service/analytics) section and select domain name for which you would like to install visitors metrics. To find "Tracking ID" click on "Show integration guide" and pick `{{trackingId}}` (*17 symbols*).
+
+### Script tag:
+
 ```html
-<script async defer type="text/javascript" src="https://analytics.ostr.io/trackingId.js"></script>
+<script async defer type="text/javascript" src="https://analytics.ostr.io/{{trackingId}}.js"></script>
 ```
 
-#### Meteor:
+### Meteor:
+
 ```shell
 meteor add ostrio:analytics
 ```
 
-#### Meteor via NPM:
+### Meteor via NPM:
+
 ```shell
 meteor npm install ostrio-analytics --save
 ```
 
-#### NPM:
+### NPM:
+
 ```shell
 npm install ostrio-analytics --save
 ```
 
-Usage
-=======
+## Usage
 
-#### Constructor `new Analytics(trackingId [, auto])`
- - `trackingId` {*String*} - [Required] Website' identifier. To obtain `trackingId` see "Installation" section above;
- - `auto` - {*Boolean*} - [Optional] Default - `true`. If set to `false` all visits and actions have to be tracked with `.track()` method, see below.
+### Constructor `new Analytics(trackingId [, auto])`
 
-Script Tag:
+- `trackingId` {*String*} - [Required] Website' identifier. To obtain `trackingId` see "Installation" section above;
+- `auto` - {*Boolean*} - [Optional] Default - `true`. If set to `false` all visits and actions have to be tracked with `.track()` method, see below.
+
+#### Script Tag:
+
 ```js
 // After including script-tag
 // analytics automatically executes in 'auto' mode,
@@ -78,44 +92,49 @@ Script Tag:
 // Example: OstrioTracker.pushEvent(foo, bar);
 ```
 
-Meteor:
-```jsx
+#### Meteor:
+
+```js
 import Analytics from 'meteor/ostrio:analytics';
 const analyticsTracker = new Analytics('trackingId');
 ```
 
-Meteor via NPM:
-```jsx
+#### Meteor via NPM:
+
+```js
 const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 ```
 
-NPM (CommonJS/RequireJS/Module):
-```jsx
+#### NPM (CommonJS/RequireJS/Module):
+
+```js
 const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 ```
 
 *From this point, you're good to go. All visitor's actions will be collected by ostr.io analytics. For custom events - see below.*
 
-##### `analyticsTracker.pushEvent(key, value)`
+### `analyticsTracker.pushEvent(key, value)`
+
 Custom events are useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
 
- - `key` {*String*} - [Required] The length of the event key must be between 1 and 24 symbols;
- - `value` {*String*} - [Required] The length of the event value must be between 1 and 64 symbols.
+- `key` {*String*} - [Required] The length of the event key must be between 1 and 24 symbols;
+- `value` {*String*} - [Required] The length of the event value must be between 1 and 64 symbols.
 
 If the length of `key` or `value` is longer than limits, it will be truncated without throwing an exception.
 
+### `analyticsTracker.track()`
 
-##### `analyticsTracker.track()`
 Use to manually send tracking info. This method has no arguments.
 
-Other examples
-=======
-##### Deep router integration:
-```jsx
+## Other examples
+
+### Deep router integration:
+
+```js
 const Analytics = require('ostrio-analytics');
 const analyticsTracker = new Analytics('trackingId', false);
 
-/*!pesudo code!*/
+/*!pseudo code!*/
 router({
   '/'() {
     analyticsTracker.track();
@@ -129,9 +148,11 @@ router({
 });
 ```
 
-##### Deep History.js Integration
+### Deep History.js Integration
+
 Although "History.js" and "History API" supported out-of-box, you may want to optimize tracking behavior to meet your needs.
-```jsx
+
+```js
 const Analytics = require('ostrio-analytics');
 const analyticsTracker = new Analytics('trackingId', false);
 
