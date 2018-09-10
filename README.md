@@ -1,6 +1,6 @@
 # Analytics for [ostr.io](https://ostr.io)
 
-[ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with Meteor, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
+[ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with Meteor, Vue, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
 
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
@@ -8,6 +8,8 @@
 - Transparent data collection;
 - Support for History API (*HTML5 History Management*);
 - Support most of JavaScript front-end based frameworks and routings;
+- [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
+- [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
 - Follows latest GDPR recommendations;
 - Easy opt-out procedure for end-users;
@@ -113,7 +115,7 @@ const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 
 *From this point, you're good to go. All visitor's actions will be collected by ostr.io analytics. For custom events - see below.*
 
-### `analyticsTracker.pushEvent(key, value)`
+### `.pushEvent(key, value)` method
 
 Custom events are useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
 
@@ -122,9 +124,56 @@ Custom events are useful for tracking certain activity on your website, like cli
 
 If the length of `key` or `value` is longer than limits, it will be truncated without throwing an exception.
 
-### `analyticsTracker.track()`
+Examples:
+
+```js
+// Various examples on tracking custom user's actions
+analyticsTracker.pushEvent('userAction', 'login');
+analyticsTracker.pushEvent('userAction', 'logout');
+analyticsTracker.pushEvent('userAction', 'signup');
+
+analyticsTracker.pushEvent('click', 'purchase');
+analyticsTracker.pushEvent('click', 'purchase-left');
+analyticsTracker.pushEvent('click', 'pricing - more info');
+```
+
+```html
+<script type="text/javascript">
+  // make analyticsTracker global variable
+  window.analyticsTracker = analyticsTracker;
+</script>
+
+<form>
+  <h2>Buy Now</h2>
+  <select>
+    <option disabled>Select product</option>
+    <option>Blue</option>
+    <option>Red</option>
+    <option>Green</option>
+  </select>
+  <input name="qty" />
+  <!-- Example on tracking form submit -->
+  <button type="submit" onClick="analyticsTracker.pushEvent('checkout', 'buy-now-form')">Checkout</button>
+</form>
+```
+
+In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md).
+
+### `.track()` method
 
 Use to manually send tracking info. This method has no arguments.
+
+Examples:
+
+```js
+const Analytics = require('ostrio-analytics');
+const analyticsTracker = new Analytics('trackingId', false);
+
+// jQuery or any other similar case:
+$(document).ready(() => {
+  analyticsTracker.track();
+});
+```
 
 ## Other examples
 
