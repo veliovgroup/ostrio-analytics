@@ -4,28 +4,30 @@
 
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
-- Open Source tracking code;
-- Transparent data collection;
-- Support for History API (*HTML5 History Management*);
-- Support most of JavaScript front-end based frameworks and routings;
-- [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
-- [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
-- Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
-- Follows latest GDPR recommendations;
-- Easy opt-out procedure for end-users;
-- Lightweight, less than 2.5KB;
-- No DOM changes;
-- No heavy CPU tasks;
-- No extra scripts loading;
-- Fast, all metrics are available in real-time;
-- Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
+- 👐 Open Source tracking code;
+- 🚀 Lightweight, less than 2.5KB;
+- 😎 No DOM changes;
+- 😎 No heavy CPU tasks;
+- 😎 No extra scripts loading;
+- 🤝 Support for History API (*HTML5 History Management*);
+- 🤝 Support most of JavaScript front-end based frameworks and routings;
+- 📈🚀 Fast, all metrics are available in real-time;
+- ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
+- 🛑✋ [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
+- 🔍 Transparent data collection;
+- 😎 Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
+- 👨‍⚖️ Follows latest GDPR recommendations;
+- 🙆‍♂️ Easy opt-out procedure for end-users;
+- 🐞 Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
 
 ## Analytics includes:
 
 - Real-time users;
-- Pageviews;
 - Sessions;
 - Unique users;
+- Pageviews:
+  - Page title;
+  - Page URL.
 - Demographics:
   - Country;
   - City.
