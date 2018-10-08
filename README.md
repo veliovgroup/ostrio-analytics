@@ -17,7 +17,7 @@
 - 🔍 Transparent data collection;
 - 😎 Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
 - 👨‍⚖️ Follows latest GDPR recommendations;
-- 🙆‍♂️ Easy opt-out procedure for end-users;
+- 🙆‍♂️ [Easy opt-out procedure for end-users](#opt-out-for-end-users);
 - 🐞 Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
 
 ## Analytics includes:
@@ -211,3 +211,7 @@ History.Adapter.bind(window, 'statechange', () => {
   analyticsTracker.track();
 });
 ```
+
+### Opt-out for end-users
+
+As our analytics solution fully respects DNT signals, to opt-out end-users need to activate DNT signals in a browser. To find out how to enable DNT and read more about "Do Not Track", visit - [All About DNT](https://allaboutdnt.com/) homepage.
