@@ -17,7 +17,7 @@
 - 🔍 Transparent data collection;
 - 😎 Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
 - 👨‍⚖️ Follows latest GDPR recommendations;
-- 🙆‍♂️ [Easy opt-out procedure for end-users](#opt-out-for-end-users);
+- 🙆 [Easy opt-out procedure for end-users](#opt-out-for-end-users);
 - 🐞 Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
 
 ## Analytics includes:
@@ -159,7 +159,7 @@ analyticsTracker.pushEvent('click', 'pricing - more info');
 </form>
 ```
 
-In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md).
+In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md).
 
 ### `.track()` method
 
