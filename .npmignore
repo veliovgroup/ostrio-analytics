@@ -1,6 +1,9 @@
-package.js
-lib/meteor.js
-lib/analytics.min.js
-node_modules
+.DS_Store
+.eslintrc
 .npm
+.github
 .versions
+lib/analytics.min.js
+lib/meteor.js
+node_modules
+package.js
