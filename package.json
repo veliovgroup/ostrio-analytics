@@ -1,6 +1,6 @@
 {
   "name": "ostrio-analytics",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Visitor's web analytics tracking code for ostr.io service",
   "main": "./lib/analytics.js",
   "scripts": {
@@ -29,10 +29,10 @@
     "DNT",
     "GDPR"
   ],
-  "author": "Dmitriy A. (https://veliovgroup.com)",
+  "homepage": "https://github.com/VeliovGroup/ostrio-analytics",
+  "author": "dr.dimitru (https://veliovgroup.com)",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/VeliovGroup/ostrio-analytics/issues"
-  },
-  "homepage": "https://github.com/VeliovGroup/ostrio-analytics"
+  }
 }
