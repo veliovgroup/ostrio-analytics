@@ -8,10 +8,5 @@ Package.describe({
 
 Package.onUse((api) => {
   api.versionsFrom('1.4');
-  api.use('ecmascript', 'client');
-  api.mainModule('./lib/meteor.js', 'client');
-});
-
-Npm.depends({
-  'ostrio-analytics': '1.1.8'
+  api.mainModule('./lib/analytics.js', 'client');
 });

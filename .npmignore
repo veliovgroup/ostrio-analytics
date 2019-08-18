@@ -4,6 +4,5 @@
 .github
 .versions
 lib/analytics.min.js
-lib/meteor.js
 node_modules
 package.js
