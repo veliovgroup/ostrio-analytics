@@ -5,7 +5,7 @@
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
 - 👐 Open Source tracking code;
-- 🚀 Lightweight, less than 2.5KB;
+- 🚀 Lightweight, less than 2.4KB;
 - 😎 No DOM changes;
 - 😎 No heavy CPU tasks;
 - 😎 No extra scripts loading;
@@ -113,6 +113,31 @@ const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 
 ```js
 const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
+```
+
+#### Using minifed version:
+
+```js
+// After adding minified analytics code to your project
+// In global scope as `OstrioTrackerClass` and `OTC`
+// as a short (short name was used in initial release,
+// we keep it for compatibility reasons)
+
+// Example:
+const analyticsTracker = new OstrioTrackerClass('trackingId');
+// Example 2:
+const analyticsTracker = new window.OstrioTrackerClass('trackingId');
+// Example 3:
+const analyticsTracker = new OTC('trackingId');
+// Example 4:
+const analyticsTracker = new window.OTC('trackingId');
+// Example 5: Initiate class with disabled "auto" tracking
+// With disabled "auto" tracking you need to use
+// `.track()` method to track a "visit"
+const analyticsTracker = new window.OTC('trackingId', false);
+whenUserVisit(() => {
+  analyticsTracker.track();
+});
 ```
 
 *From this point, you're good to go. All visitor's actions will be collected by ostr.io analytics. For custom events - see below.*
