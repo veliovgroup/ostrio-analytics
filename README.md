@@ -231,7 +231,7 @@ Examples:
 
 ```js
 const Analytics = require('ostrio-analytics');
-const analyticsTracker = new Analytics('trackingId', false);
+const analyticsTracker = new Analytics('trackingId');
 
 analyticsTracker.onPushEvent((key, value) => {
   console.log({ key, value });
@@ -250,7 +250,7 @@ Examples:
 
 ```js
 const Analytics = require('ostrio-analytics');
-const analyticsTracker = new Analytics('trackingId', false);
+const analyticsTracker = new Analytics('trackingId');
 
 analyticsTracker.onTrack(() => {
   console.log('Tacking a session');
@@ -315,7 +315,7 @@ In your `<head>` add Google Analytics as instructed:
 
 ```js
 const Analytics = require('ostrio-analytics');
-const analyticsTracker = new Analytics('google-tracking-id', false);
+const analyticsTracker = new Analytics('google-tracking-id');
 
 analyticsTracker.onTrack(() => {
   // Track navigation with Google Analytics
