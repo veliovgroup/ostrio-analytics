@@ -2,6 +2,27 @@
 
 [ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with Meteor, Vue, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
 
+## ToC:
+
+- [Why ostr.io analytics?](https://github.com/VeliovGroup/ostrio-analytics#why-ostrio-analytics)
+- [List of tracked data](https://github.com/VeliovGroup/ostrio-analytics#analytics-includes)
+- [Installation](https://github.com/VeliovGroup/ostrio-analytics#installation):
+  - [`<script>` tag](https://github.com/VeliovGroup/ostrio-analytics#script-tag)
+  - [NPM](https://github.com/VeliovGroup/ostrio-analytics#npm)
+  - [Meteor (NPM)](https://github.com/VeliovGroup/ostrio-analytics#meteor-via-npm)
+  - [Meteor (Atmosphere)](https://github.com/VeliovGroup/ostrio-analytics#meteor)
+- [API](https://github.com/VeliovGroup/ostrio-analytics#usage):
+  - [`new Analytics(/*...*/)`](https://github.com/VeliovGroup/ostrio-analytics#constructor-new-analyticstrackingid--auto)
+  - [`Analytics#track()`](https://github.com/VeliovGroup/ostrio-analytics#track-method)
+  - [`Analytics#pushEvent()`](https://github.com/VeliovGroup/ostrio-analytics#pusheventkey-value-method)
+  - [`Analytics#onTrack()`](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method)
+  - [`Analytics#onPushEvent()`](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method)
+- [Examples](https://github.com/VeliovGroup/ostrio-analytics#other-examples):
+  - [Router integration](https://github.com/VeliovGroup/ostrio-analytics#deep-router-integration)
+  - [History.js integration](https://github.com/VeliovGroup/ostrio-analytics#deep-historyjs-integration)
+  - [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration)
+- [__Opt-out for end-users__](https://github.com/VeliovGroup/ostrio-analytics#opt-out-for-end-users)
+
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
 - 👐 Open Source tracking code;
@@ -13,7 +34,7 @@
 - 🤝 Support most of JavaScript front-end based frameworks and routings;
 - 📈🚀 Fast, all metrics are available in real-time;
 - ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
-- 🛑✋ [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
+- 🛑 [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - 🔍 Transparent data collection;
 - 😎 Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
 - 👨‍⚖️ Follows latest GDPR recommendations;
@@ -202,6 +223,46 @@ $(document).ready(() => {
 });
 ```
 
+### `.onPushEvent()` method
+
+Use to hook on [`.pushEvent()` method](). Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+
+Examples:
+
+```js
+const Analytics = require('ostrio-analytics');
+const analyticsTracker = new Analytics('trackingId', false);
+
+analyticsTracker.onPushEvent((key, value) => {
+  console.log({ key, value });
+  // OUTPUT:
+  // { key: 'testKey', value: 'testValue' }
+});
+
+analyticsTracker.pushEvent('testKey', 'testValue');
+```
+
+### `.onTrack()` method
+
+Use to hook on [`.track()` method]() and browser navigation. Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+
+Examples:
+
+```js
+const Analytics = require('ostrio-analytics');
+const analyticsTracker = new Analytics('trackingId', false);
+
+analyticsTracker.onTrack(() => {
+  console.log('Tacking a session');
+  // OUTPUT :
+  // Tacking a session
+});
+
+// Callback will be executed on every browser navigation
+// or upon calling `.track()` method
+analyticsTracker.track();
+```
+
 ## Other examples
 
 ### Deep router integration:
@@ -234,6 +295,40 @@ const analyticsTracker = new Analytics('trackingId', false);
 
 History.Adapter.bind(window, 'statechange', () => {
   analyticsTracker.track();
+});
+```
+
+### Google Analytics integration
+
+Using [`.onTrack()` method](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Analytics upon navigation or event.
+
+In your `<head>` add Google Analytics as instructed:
+
+```html
+<script async src="https://www.googletagmanager.com/gtag/js?id=google-tracking-id"></script>
+<script type='text/javascript'>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
+```
+
+```js
+const Analytics = require('ostrio-analytics');
+const analyticsTracker = new Analytics('google-tracking-id', false);
+
+analyticsTracker.onTrack(() => {
+  // Track navigation with Google Analytics
+  gtag('config', 'google-tracking-id', {
+    page_title: document.title,
+    page_path: document.location.pathname,
+    page_location: document.location.href
+  });
+});
+
+_app.OstrioTracker.onPushEvent((name, value) => {
+  // Send events to Google Analytics
+  gtag('event', name, { value });
 });
 ```
 
