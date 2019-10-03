@@ -225,7 +225,7 @@ $(document).ready(() => {
 
 ### `.onPushEvent()` method
 
-Use to hook on [`.pushEvent()` method](). Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+Use to hook on [`.pushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#pusheventkey-value-method). Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
 
 Examples:
 
@@ -244,7 +244,7 @@ analyticsTracker.pushEvent('testKey', 'testValue');
 
 ### `.onTrack()` method
 
-Use to hook on [`.track()` method]() and browser navigation. Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+Use to hook on [`.track()` method](https://github.com/VeliovGroup/ostrio-analytics#track-method) and browser navigation. Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
 
 Examples:
 
@@ -326,7 +326,7 @@ analyticsTracker.onTrack(() => {
   });
 });
 
-_app.OstrioTracker.onPushEvent((name, value) => {
+analyticsTracker.onPushEvent((name, value) => {
   // Send events to Google Analytics
   gtag('event', name, { value });
 });
