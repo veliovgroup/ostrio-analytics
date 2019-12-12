@@ -305,11 +305,13 @@ Using [`.onTrack()` method](https://github.com/VeliovGroup/ostrio-analytics#ontr
 In your `<head>` add Google Analytics as instructed:
 
 ```html
-<script async src="https://www.googletagmanager.com/gtag/js?id=google-tracking-id"></script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
 <script type='text/javascript'>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-XXXXXXXXX-X', 'auto');
+  if ('sendBeacon' in navigator) {
+    ga('set', 'transport', 'beacon');
+  }
 </script>
 ```
 
@@ -319,16 +321,21 @@ const analyticsTracker = new Analytics('google-tracking-id');
 
 analyticsTracker.onTrack(() => {
   // Track navigation with Google Analytics
-  gtag('config', 'google-tracking-id', {
-    page_title: document.title,
-    page_path: document.location.pathname,
-    page_location: document.location.href
+  ga('send', {
+    hitType: 'pageview',
+    page: document.location.pathname,
+    location: document.location.href,
+    title: document.title
   });
 });
 
 analyticsTracker.onPushEvent((name, value) => {
   // Send events to Google Analytics
-  gtag('event', name, { value });
+  ga('send', {
+    hitType: 'event',
+    eventCategory: name,
+    eventAction: value
+  });
 });
 ```
 
