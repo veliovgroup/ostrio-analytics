@@ -1,8 +1,12 @@
+*.md
 .DS_Store
+.eslintcache
 .eslintrc
-.npm
 .github
+.meteor
+.npm
 .versions
 lib/analytics.min.js
 node_modules
+npm-debug.log*
 package.js
