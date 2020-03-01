@@ -10,7 +10,7 @@
   - [`<script>` tag](https://github.com/VeliovGroup/ostrio-analytics#script-tag)
   - [NPM](https://github.com/VeliovGroup/ostrio-analytics#npm)
   - [Meteor (NPM)](https://github.com/VeliovGroup/ostrio-analytics#meteor-via-npm)
-  - [Meteor (Atmosphere)](https://github.com/VeliovGroup/ostrio-analytics#meteor)
+  - [Meteor (Atmosphere)](https://github.com/VeliovGroup/ostrio-analytics#meteor-via-atmosphere)
 - [API](https://github.com/VeliovGroup/ostrio-analytics#usage):
   - [`new Analytics(/*...*/)`](https://github.com/VeliovGroup/ostrio-analytics#constructor-new-analyticstrackingid--auto)
   - [`Analytics#track()`](https://github.com/VeliovGroup/ostrio-analytics#track-method)
@@ -21,18 +21,20 @@
   - [Router integration](https://github.com/VeliovGroup/ostrio-analytics#deep-router-integration)
   - [History.js integration](https://github.com/VeliovGroup/ostrio-analytics#deep-historyjs-integration)
   - [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration)
+  - [Google Tag Manager integration](https://github.com/VeliovGroup/ostrio-analytics#google-tag-manager-integration)
 - [__Opt-out for end-users__](https://github.com/VeliovGroup/ostrio-analytics#opt-out-for-end-users)
 
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
 - 👐 Open Source tracking code;
-- 🚀 Lightweight, less than 2.4KB;
+- 📦 Lightweight, less than 2.8KB;
+- 🚀 Fast, all metrics are available in real-time;
 - 😎 No DOM changes;
 - 😎 No heavy CPU tasks;
 - 😎 No extra scripts loading;
+- 📡 Utilizes [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) when available;
 - 🤝 Support for History API (*HTML5 History Management*);
 - 🤝 Support most of JavaScript front-end based frameworks and routings;
-- 📈🚀 Fast, all metrics are available in real-time;
 - ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
 - 🛑 [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - 🔍 Transparent data collection;
@@ -83,7 +85,7 @@ To find installation instruction - go to [Analytics](https://ostr.io/service/ana
 <script async defer type="text/javascript" src="https://analytics.ostr.io/{{trackingId}}.js"></script>
 ```
 
-### Meteor:
+### Meteor via Atmosphere:
 
 ```shell
 meteor add ostrio:analytics
@@ -105,7 +107,7 @@ npm install ostrio-analytics --save
 
 ### Constructor `new Analytics(trackingId [, auto])`
 
-- `trackingId` {*String*} - [Required] Website' identifier. To obtain `trackingId` see "Installation" section above;
+- `trackingId` {*String*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
 - `auto` - {*Boolean*} - [Optional] Default - `true`. If set to `false` all visits and actions have to be tracked with `.track()` method, see below.
 
 #### Script Tag:
@@ -117,14 +119,14 @@ npm install ostrio-analytics --save
 // Example: OstrioTracker.pushEvent(foo, bar);
 ```
 
-#### Meteor:
+#### Meteor/ES6:
 
 ```js
 import Analytics from 'meteor/ostrio:analytics';
 const analyticsTracker = new Analytics('trackingId');
 ```
 
-#### Meteor via NPM:
+#### Meteor/NPM:
 
 ```js
 const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
@@ -148,9 +150,9 @@ const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 const analyticsTracker = new OstrioTrackerClass('trackingId');
 // Example 2:
 const analyticsTracker = new window.OstrioTrackerClass('trackingId');
-// Example 3:
+// Example 3 (shorthand):
 const analyticsTracker = new OTC('trackingId');
-// Example 4:
+// Example 4 (shorthand):
 const analyticsTracker = new window.OTC('trackingId');
 // Example 5: Initiate class with disabled "auto" tracking
 // With disabled "auto" tracking you need to use
@@ -317,7 +319,7 @@ In your `<head>` add Google Analytics as instructed:
 
 ```js
 const Analytics = require('ostrio-analytics');
-const analyticsTracker = new Analytics('google-tracking-id');
+const analyticsTracker = new Analytics('trackingId');
 
 analyticsTracker.onTrack(() => {
   // Track navigation with Google Analytics
@@ -336,6 +338,40 @@ analyticsTracker.onPushEvent((name, value) => {
     eventCategory: name,
     eventAction: value
   });
+});
+```
+
+### Google Tag Manager integration
+
+Using [`.onTrack()` method](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Tag Manager upon navigation or event.
+
+In your `<head>` add Google Tag Manager as instructed:
+
+```html
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+<script type='text/javascript'>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
+```
+
+```js
+const Analytics = require('ostrio-analytics');
+const analyticsTracker = new Analytics('trackingId', false);
+
+analyticsTracker.onTrack(() => {
+  // Track navigation with Google Analytics
+  gtag('config', 'UA-XXXXXXXXX-X', {
+    page_title: document.title,
+    page_path: document.location.pathname,
+    page_location: document.location.href
+  });
+});
+
+_app.OstrioTracker.onPushEvent((name, value) => {
+  // Send events to Google Analytics
+  gtag('event', name, { value });
 });
 ```
 
