@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:analytics',
-  version: '1.3.0',
+  version: '1.3.1',
   summary: 'Visitor\'s web analytics tracking code for ostr.io service',
   git: 'https://github.com/VeliovGroup/ostrio-analytics',
   documentation: 'README.md'
