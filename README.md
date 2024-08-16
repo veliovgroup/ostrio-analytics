@@ -1,6 +1,6 @@
 # Analytics for [ostr.io](https://ostr.io)
 
-[ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with Meteor, Vue, React, Angular, Backbone, Ember and other front-end JavaScript frameworks.
+[ostr.io](https://ostr.io) provides lightweight and full-featured [visitor's analytics](https://ostr.io/info/web-analytics) for websites. Our solution fully compatible and works *out of the box* with React.js, Next.js, Vue.js, Nuxt.js, Svelte.js, Meteor.js, Blaze.js, Angular.js, Backbone.js, Ember.js and other front-end JavaScript frameworks.
 
 ## ToC:
 
@@ -38,10 +38,9 @@
 - ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
 - 🛑 [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - 🔍 Transparent data collection;
-- 😎 Respect [DNT](https://en.wikipedia.org/wiki/Do_Not_Track) policy;
 - 👨‍⚖️ Follows latest GDPR recommendations;
 - 🙆 [Easy opt-out procedure for end-users](#opt-out-for-end-users);
-- 🐞 Global Runtime Errors tracking - *Whenever an error happens during runtime you will be reported to* "Errors" *section. This is super-useful as you never can test your client's code in all imaginable environments, but your website visitors do*.
+- 🐞 Global Runtime Errors tracking - *Whenever an error happens during runtime you will receive report to* "Errors" *section. This is super-useful as errors reported right from user's device allowing to website visitors participate in testing of all imaginable devices and software combinations*.
 
 ## Analytics includes:
 
@@ -273,7 +272,7 @@ analyticsTracker.track();
 const Analytics = require('ostrio-analytics');
 const analyticsTracker = new Analytics('trackingId', false);
 
-/*!pseudo code!*/
+/* router definition */
 router({
   '/'() {
     analyticsTracker.track();
@@ -377,4 +376,4 @@ _app.OstrioTracker.onPushEvent((name, value) => {
 
 ### Opt-out for end-users
 
-As our analytics solution fully respects DNT signals, to opt-out end-users need to activate DNT signals in a browser. To find out how to enable DNT and read more about "Do Not Track", visit - [All About DNT](https://allaboutdnt.com/) homepage.
+[One-click opt-out](https://analytics.ostr.io/settings/manage/opt-out/) procedure. Webmasters can add "opt-out link" to their legal documents and "settings" pages to follow the best privacy experience practices.
