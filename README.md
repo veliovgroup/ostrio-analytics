@@ -4,25 +4,25 @@
 
 ## ToC:
 
-- [Why ostr.io analytics?](https://github.com/VeliovGroup/ostrio-analytics#why-ostrio-analytics)
-- [List of tracked data](https://github.com/VeliovGroup/ostrio-analytics#analytics-includes)
-- [Installation](https://github.com/VeliovGroup/ostrio-analytics#installation):
-  - [`<script>` tag](https://github.com/VeliovGroup/ostrio-analytics#script-tag)
-  - [NPM](https://github.com/VeliovGroup/ostrio-analytics#npm)
-  - [Meteor (NPM)](https://github.com/VeliovGroup/ostrio-analytics#meteor-via-npm)
-  - [Meteor (Atmosphere)](https://github.com/VeliovGroup/ostrio-analytics#meteor-via-atmosphere)
-- [API](https://github.com/VeliovGroup/ostrio-analytics#usage):
-  - [`new Analytics(/*...*/)`](https://github.com/VeliovGroup/ostrio-analytics#constructor-new-analyticstrackingid--auto)
-  - [`Analytics#track()`](https://github.com/VeliovGroup/ostrio-analytics#track-method)
-  - [`Analytics#pushEvent()`](https://github.com/VeliovGroup/ostrio-analytics#pusheventkey-value-method)
-  - [`Analytics#onTrack()`](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method)
-  - [`Analytics#onPushEvent()`](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method)
-- [Examples](https://github.com/VeliovGroup/ostrio-analytics#other-examples):
-  - [Router integration](https://github.com/VeliovGroup/ostrio-analytics#deep-router-integration)
-  - [History.js integration](https://github.com/VeliovGroup/ostrio-analytics#deep-historyjs-integration)
-  - [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration)
-  - [Google Tag Manager integration](https://github.com/VeliovGroup/ostrio-analytics#google-tag-manager-integration)
-- [__Opt-out for end-users__](https://github.com/VeliovGroup/ostrio-analytics#opt-out-for-end-users)
+- [Why ostr.io analytics?](https://github.com/veliovgroup/ostrio-analytics#why-ostrio-analytics)
+- [List of tracked data](https://github.com/veliovgroup/ostrio-analytics#analytics-includes)
+- [Installation](https://github.com/veliovgroup/ostrio-analytics#installation):
+  - [`<script>` tag](https://github.com/veliovgroup/ostrio-analytics#script-tag)
+  - [NPM](https://github.com/veliovgroup/ostrio-analytics#npm)
+  - [Meteor (NPM)](https://github.com/veliovgroup/ostrio-analytics#meteor-via-npm)
+  - [Meteor (Atmosphere)](https://github.com/veliovgroup/ostrio-analytics#meteor-via-atmosphere)
+- [API](https://github.com/veliovgroup/ostrio-analytics#usage):
+  - [`new Analytics(/*...*/)`](https://github.com/veliovgroup/ostrio-analytics#constructor-new-analyticstrackingid--auto)
+  - [`Analytics#track()`](https://github.com/veliovgroup/ostrio-analytics#track-method)
+  - [`Analytics#pushEvent()`](https://github.com/veliovgroup/ostrio-analytics#pusheventkey-value-method)
+  - [`Analytics#onTrack()`](https://github.com/veliovgroup/ostrio-analytics#ontrack-method)
+  - [`Analytics#onPushEvent()`](https://github.com/veliovgroup/ostrio-analytics#onpushevent-method)
+- [Examples](https://github.com/veliovgroup/ostrio-analytics#other-examples):
+  - [Router integration](https://github.com/veliovgroup/ostrio-analytics#deep-router-integration)
+  - [History.js integration](https://github.com/veliovgroup/ostrio-analytics#deep-historyjs-integration)
+  - [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration)
+  - [Google Tag Manager integration](https://github.com/veliovgroup/ostrio-analytics#google-tag-manager-integration)
+- [__Opt-out for end-users__](https://github.com/veliovgroup/ostrio-analytics#opt-out-for-end-users)
 
 ## Why [ostr.io](https://ostr.io/info/web-analytics) analytics?:
 
@@ -35,8 +35,8 @@
 - 📡 Utilizes [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) when available;
 - 🤝 Support for History API (*HTML5 History Management*);
 - 🤝 Support most of JavaScript front-end based frameworks and routings;
-- ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md);
-- 🛑 [Detect and Track AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
+- ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md);
+- 🛑 [Detect and Track AdBlock usage](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - 🔍 Transparent data collection;
 - 👨‍⚖️ Follows latest GDPR recommendations;
 - 🙆 [Easy opt-out procedure for end-users](#opt-out-for-end-users);
@@ -206,7 +206,7 @@ analyticsTracker.pushEvent('click', 'pricing - more info');
 </form>
 ```
 
-In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/VeliovGroup/ostrio/blob/master/docs/analytics/track-amp.md).
+In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md).
 
 ### `.track()` method
 
@@ -226,7 +226,7 @@ $(document).ready(() => {
 
 ### `.onPushEvent()` method
 
-Use to hook on [`.pushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#pusheventkey-value-method). Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+Use to hook on [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#pusheventkey-value-method). Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
 
 Examples:
 
@@ -245,7 +245,7 @@ analyticsTracker.pushEvent('testKey', 'testValue');
 
 ### `.onTrack()` method
 
-Use to hook on [`.track()` method](https://github.com/VeliovGroup/ostrio-analytics#track-method) and browser navigation. Read how to use this method for deep [Google Analytics integration](https://github.com/VeliovGroup/ostrio-analytics#google-analytics-integration).
+Use to hook on [`.track()` method](https://github.com/veliovgroup/ostrio-analytics#track-method) and browser navigation. Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
 
 Examples:
 
@@ -301,7 +301,7 @@ History.Adapter.bind(window, 'statechange', () => {
 
 ### Google Analytics integration
 
-Using [`.onTrack()` method](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Analytics upon navigation or event.
+Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Analytics upon navigation or event.
 
 In your `<head>` add Google Analytics as instructed:
 
@@ -342,7 +342,7 @@ analyticsTracker.onPushEvent((name, value) => {
 
 ### Google Tag Manager integration
 
-Using [`.onTrack()` method](https://github.com/VeliovGroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/VeliovGroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Tag Manager upon navigation or event.
+Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#ontrack-method) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#onpushevent-method) we can send tracking-data to Google Tag Manager upon navigation or event.
 
 In your `<head>` add Google Tag Manager as instructed:
 
