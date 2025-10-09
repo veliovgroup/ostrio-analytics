@@ -1,8 +1,8 @@
 Package.describe({
   name: 'ostrio:analytics',
-  version: '1.3.1',
-  summary: 'Visitor\'s web analytics tracking code for ostr.io service',
-  git: 'https://github.com/VeliovGroup/ostrio-analytics',
+  version: '1.4.0',
+  summary: 'CCPA and GDPR friendly real-time web analytics with errors collection',
+  git: 'https://github.com/veliovgroup/ostrio-analytics',
   documentation: 'README.md'
 });
 
