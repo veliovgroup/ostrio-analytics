@@ -1,8 +1,6 @@
-# Analytics for [ostr.io](https://ostr.io)
+# Web Analytics by [ostr.io](https://ostr.io)
 
 [ostr.io](https://ostr.io) provides lightweight, privacy-respectful, real-time [web analytics](https://ostr.io/info/web-analytics) for modern SPAs and MPAs. The tracker works out-of-the-box with WordPress, WebFlow, React, Next.js, Vue, Nuxt, Svelte, Angular, Meteor/Blaze, Backbone, Ember, and vanilla JS.
-
----
 
 ## Table of Contents
 
@@ -31,8 +29,6 @@
   - [Google Tag Manager integration](#google-tag-manager-integration)
 - [Opt-out for end-users](#opt-out-for-end-users)
 
----
-
 ## Why ostr.io analytics?
 
 - 👐 Open-source tracking code.
@@ -46,8 +42,6 @@
 - 🔍 Transparent data collection; GDPR/CCPA-aligned controls.
 - 🙆 Easy, hosted **opt-out** for your users.
 - 🐞 Global runtime error reporting (including `unhandled` *Promise* rejections).
-
----
 
 ## What is tracked
 
@@ -71,11 +65,11 @@
   - Device data
   - File name and line/column
 
----
-
 ## Installation
 
 To get your `trackingId`, open the [Analytics](https://ostr.io/service/analytics) section in your ostr.io dashboard, select the domain, then click **Show integration guide**.
+
+---
 
 ### Script tag
 
@@ -94,6 +88,8 @@ Example: OstrioTracker.pushEvent(foo, bar);
 <link rel="dns-prefetch" href="https://analytics.ostr.io/">
 <script async defer src="https://analytics.ostr.io/{{trackingId}}.js"></script>
 ```
+
+---
 
 ### NPM
 
@@ -119,12 +115,14 @@ const analyticsClass = require('ostrio-analytics');
 const analyticsTracker = new analyticsClass('{{trackingId}}');
 ```
 
+---
+
 ### Minifed version
 
 Copy-paste minified version of the analytics script.
 
 > [!NOTE]
-> After adding minified analytics code to a project — it will be available as `OstrioTrackerClass` int he global scope
+> After adding minified analytics code to a project — it will be available as `OstrioTrackerClass` in the global scope
 
 ```js
 // Example:
@@ -133,11 +131,11 @@ const analyticsTracker = new OstrioTrackerClass('{{trackingId}}');
 const analyticsTracker = new window.OstrioTrackerClass('{{trackingId}}');
 ```
 
----
-
 ## Usage
 
-Use one-liner or extend with additional options
+Use one-liner or extend with additional `options` object
+
+---
 
 ### Constructor
 
@@ -150,7 +148,7 @@ new Analytics(trackingId: string, options?: {
   ignoredQueries?: string[]; // case-insensitive query keys to drop
   ignoredPaths?: (string|RegExp)[]; // '/path/*' prefix, '/path/' exact, or RegExp
   transport?: 'fetch' | 'beacon' | 'img';  // default: 'fetch'
-})
+} as OstrioWebAnalyticsConfig);
 ```
 
 - `trackingId` {*string*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
@@ -166,9 +164,11 @@ new Analytics(trackingId: string, options?: {
 > [!TIP]
 > After initializing `new Analytics()` — it's good to go, visitor navigation will be collected and reported in ostr.io analytics. For custom events - see below.*
 
+---
+
 ### All Methods
 
-List of all methods and argument available on `OstrioWebAnalytics` instance:
+List of all methods and its arguments available on `OstrioWebAnalytics` instance:
 
 ```ts
 import Analytics from "ostrio-analytics/source";
@@ -212,6 +212,8 @@ analyticsTracker.track();
 // STOP AUTO-TRACKING
 analyticsTracker.destroy();
 ```
+
+---
 
 ### Track Custom Events
 
@@ -257,6 +259,8 @@ analyticsTracker.pushEvent('click', 'pricing - more info');
 
 In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md).
 
+---
+
 ### Custom Navigation Tracking
 
 Manually dispatch a pageview.
@@ -292,6 +296,8 @@ History.Adapter.bind(window, 'statechange', () => {
 });
 ```
 
+---
+
 ### Event Callbacks
 
 Use `.onPushEvent()` to hook into [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#track-custom-events). Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
@@ -306,6 +312,8 @@ analyticsTracker.onPushEvent((key, value) => {
 analyticsTracker.pushEvent('testKey', 'testValue');
 ```
 
+---
+
 ### Tracking Callbacks
 
 Use `.onTrack()` to hook into [`.track()` method](https://github.com/veliovgroup/ostrio-analytics#custom-navigation-tracking) and browser navigation in `{auto: true}` mode. Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
@@ -319,6 +327,8 @@ analyticsTracker.onTrack(() => {
 });
 ```
 
+---
+
 ### Destroy Tracker
 
 Call `.destroy()` to unbind listeners and timers (useful on SPA teardown/HMR).
@@ -327,11 +337,11 @@ Call `.destroy()` to unbind listeners and timers (useful on SPA teardown/HMR).
 analyticsTracker.destroy();
 ```
 
----
-
 ## Advanced
 
 Explode advanced settings and its usage
+
+---
 
 ### Transports
 
@@ -345,6 +355,8 @@ const analyticsTracker = new Analytics('{{trackingId}}', { transport: 'img' });
 // OR DURING RUNTIME:
 analyticsTracker.setTransport('beacon');
 ```
+
+---
 
 ### Ignoring paths
 
@@ -371,6 +383,8 @@ const analyticsTracker = new Analytics('{{trackingId}}', {
 });
 ```
 
+---
+
 ### Ignoring queries / search params
 
 > [!NOTE]
@@ -394,6 +408,8 @@ const analyticsTracker = new Analytics('{{trackingId}}', {
 });
 ```
 
+---
+
 ### Hash & query tracking controls
 
 Control what constitutes a “new page” for SPAs:
@@ -411,11 +427,11 @@ analyticsTracker.applySettings({
 });
 ```
 
----
-
 ## Examples
 
 Explore various custom usage examples
+
+---
 
 ### Google Analytics integration
 
@@ -455,6 +471,8 @@ analyticsTracker.onPushEvent((name, value) => {
 });
 ```
 
+---
+
 ### Google Tag Manager integration
 
 Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking-data to Google Tag Manager upon navigation or event.
@@ -488,6 +506,8 @@ analyticsTracker.onPushEvent((name, value) => {
   gtag('event', name, { value });
 });
 ```
+
+---
 
 ### Opt-out for end-users
 
