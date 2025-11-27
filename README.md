@@ -34,7 +34,7 @@
 - 😎 No extra scripts loading;
 - 📡 Utilizes [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) when available;
 - 🤝 Support for History API (*HTML5 History Management*);
-- 🤝 Support most of JavaScript front-end based frameworks and routings;
+- 🤝 Support most of JavaScript front-end based frameworks and routing libraries;
 - ⚡️ [Track Accelerated Mobile Pages (AMP)](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md);
 - 🛑 [Detect and Track AdBlock usage](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md);
 - 🔍 Transparent data collection;
@@ -84,18 +84,6 @@ To find installation instruction - go to [Analytics](https://ostr.io/service/ana
 <script async defer type="text/javascript" src="https://analytics.ostr.io/{{trackingId}}.js"></script>
 ```
 
-### Meteor via Atmosphere:
-
-```shell
-meteor add ostrio:analytics
-```
-
-### Meteor via NPM:
-
-```shell
-meteor npm install ostrio-analytics --save
-```
-
 ### NPM:
 
 ```shell
@@ -109,7 +97,7 @@ npm install ostrio-analytics --save
 - `trackingId` {*String*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
 - `auto` - {*Boolean*} - [Optional] Default - `true`. If set to `false` all visits and actions have to be tracked with `.track()` method, see below.
 
-#### Script Tag:
+#### Script Tag
 
 ```js
 // After including script-tag
@@ -118,26 +106,20 @@ npm install ostrio-analytics --save
 // Example: OstrioTracker.pushEvent(foo, bar);
 ```
 
-#### Meteor/ES6:
+#### NPM (import)
 
 ```js
-import Analytics from 'meteor/ostrio:analytics';
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId');
 ```
 
-#### Meteor/NPM:
+#### NPM (CommonJS/RequireJS/Module)
 
 ```js
 const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
 ```
 
-#### NPM (CommonJS/RequireJS/Module):
-
-```js
-const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
-```
-
-#### Using minifed version:
+#### Using minifed version
 
 ```js
 // After adding minified analytics code to your project
@@ -215,7 +197,7 @@ Use to manually send tracking info. This method has no arguments.
 Examples:
 
 ```js
-const Analytics = require('ostrio-analytics');
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId', false);
 
 // jQuery or any other similar case:
@@ -231,7 +213,7 @@ Use to hook on [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-ana
 Examples:
 
 ```js
-const Analytics = require('ostrio-analytics');
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId');
 
 analyticsTracker.onPushEvent((key, value) => {
@@ -250,7 +232,7 @@ Use to hook on [`.track()` method](https://github.com/veliovgroup/ostrio-analyti
 Examples:
 
 ```js
-const Analytics = require('ostrio-analytics');
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId');
 
 analyticsTracker.onTrack(() => {
@@ -266,10 +248,12 @@ analyticsTracker.track();
 
 ## Other examples
 
+Learn how to implement deeper integrations
+
 ### Deep router integration:
 
 ```js
-const Analytics = require('ostrio-analytics');
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId', false);
 
 /* router definition */
@@ -291,7 +275,7 @@ router({
 Although "History.js" and "History API" supported out-of-box, you may want to optimize tracking behavior to meet your needs.
 
 ```js
-const Analytics = require('ostrio-analytics');
+import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId', false);
 
 History.Adapter.bind(window, 'statechange', () => {
@@ -368,7 +352,7 @@ analyticsTracker.onTrack(() => {
   });
 });
 
-_app.OstrioTracker.onPushEvent((name, value) => {
+analyticsTracker.onPushEvent((name, value) => {
   // Send events to Google Analytics
   gtag('event', name, { value });
 });
