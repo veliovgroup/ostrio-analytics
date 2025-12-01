@@ -42,7 +42,7 @@ export default [
           varsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/member-delimiter-style': [
+      '@stylistic/member-delimiter-style': [
         'error',
         {
           multiline: { delimiter: 'semi', requireLast: true },
@@ -50,7 +50,7 @@ export default [
           multilineDetection: 'brackets',
         },
       ],
-      '@typescript-eslint/type-annotation-spacing': 'error',
+      '@stylistic/type-annotation-spacing': 'error',
       '@typescript-eslint/no-use-before-define': [2, 'nofunc'],
       strict: [2, 'never'],
       'no-shadow-restricted-names': 2,
@@ -112,7 +112,7 @@ export default [
       '@stylistic/wrap-iife': [2, 'any'],
       '@stylistic/indent': [2, 2],
       '@stylistic/brace-style': [2, '1tbs', { allowSingleLine: true }],
-      '@stylistic/quotes': [2, 'single', 'avoid-escape'],
+      '@stylistic/quotes': [2, 'single', { avoidEscape: true }],
       '@stylistic/comma-spacing': [2, { before: false, after: true }],
       '@stylistic/comma-style': [2, 'last'],
       '@stylistic/eol-last': 2,
@@ -161,21 +161,13 @@ export default [
         { allowAllPropertiesOnSameLine: false },
       ],
       '@stylistic/array-bracket-spacing': ['error', 'never'],
-      '@stylistic/array-bracket-newline': [
-        'error',
-        { multiline: true, minItems: 3 },
-      ],
-      '@stylistic/newline-per-chained-call': [
-        'error',
-        { ignoreChainWithDepth: 2 },
-      ],
+      '@stylistic/array-bracket-newline': ['error', 'never'],
       '@stylistic/operator-linebreak': [
         'error',
         'before',
         { overrides: { '=': 'after' } },
       ],
       '@stylistic/template-curly-spacing': ['error', 'never'],
-      '@stylistic/func-call-spacing': ['error', 'never'],
     },
   },
 ];
