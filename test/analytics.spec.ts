@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from 'chai';
 import sinon from 'sinon';
-import 'global-jsdom/register';
 import globalJsdom from 'global-jsdom';
 
 // Import TS source; switch to ../dist/index.cjs if you test the bundle
