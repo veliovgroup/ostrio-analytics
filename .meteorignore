@@ -5,6 +5,11 @@
 .DS_Store
 .eslintcache
 .eslintrc
+docs
+dist
+test
+eslint.config.mjs
+rollup.config.mjs
 node_modules
 CHANGELOG.md
 CODE_OF_CONDUCT.md
@@ -15,3 +20,4 @@ LICENSE
 README.md
 package.json
 package-lock.json
+tsconfig.test.json
