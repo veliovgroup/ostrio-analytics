@@ -76,13 +76,6 @@
             this.eventRemovers = [];
             this.autoTimer = null;
             this.lastTrackTimestamp = false;
-            var cfg = typeof opts === 'boolean' ? { auto: opts } : (opts || {});
-            this.sid = sid;
-            this.auto = !(cfg.auto === false);
-            this.trackErrors = !(cfg.trackErrors === false);
-            cfg.ignoredQueries && this.ignoreQueries(cfg.ignoredQueries);
-            cfg.ignoredPaths && this.ignorePaths(cfg.ignoredPaths);
-            this.applySettings(cfg);
             this.warn = function () {
                 if (typeof console === 'undefined')
                     return;
@@ -93,9 +86,15 @@
                 args.unshift('[ostrio]');
                 fn.apply(console, args);
             };
+            var cfg = typeof opts === 'boolean' ? { auto: opts } : (opts || {});
+            this.sid = sid;
+            this.auto = !(cfg.auto === false);
+            this.trackErrors = !(cfg.trackErrors === false);
+            cfg.ignoredQueries && this.ignoreQueries(cfg.ignoredQueries);
+            cfg.ignoredPaths && this.ignorePaths(cfg.ignoredPaths);
+            this.applySettings(cfg);
             if (!this.sid || typeof this.sid !== 'string' || this.sid.length !== 17) {
-                this.warn(WARN.sidError);
-                return;
+                throw new Error(WARN.sidError);
             }
             if (this.auto) {
                 this.initAutoTracking();
@@ -121,13 +120,16 @@
                 this.serviceUrl = cfg.serviceUrl;
                 this.serviceUrl = this.serviceUrl.endsWith('/') ? this.serviceUrl : "".concat(this.serviceUrl, "/");
             }
-            if (cfg.transport) {
-                this.setTransport(cfg.transport);
-            }
+            this.setTransport(cfg.transport || this.transport);
         };
         OstrioWebAnalytics.prototype.setTransport = function (t) {
             if (SUPPORTED_TRANSPORTS.includes(t)) {
-                this.transport = t;
+                if (t === Transport.Fetch && typeof fetch !== 'function') {
+                    this.transport = Transport.Img;
+                }
+                else {
+                    this.transport = t;
+                }
             }
         };
         OstrioWebAnalytics.prototype.ignorePath = function (path) {
@@ -135,7 +137,7 @@
         };
         OstrioWebAnalytics.prototype.ignorePaths = function (paths) {
             if (Array.isArray(paths)) {
-                paths.forEach(this.ignorePath.bind(this));
+                paths.forEach(this.ignorePath, this);
             }
         };
         OstrioWebAnalytics.prototype.ignoreQuery = function (queryKey) {
@@ -143,7 +145,7 @@
         };
         OstrioWebAnalytics.prototype.ignoreQueries = function (queryKeys) {
             if (Array.isArray(queryKeys)) {
-                queryKeys.forEach(this.ignoreQuery.bind(this));
+                queryKeys.forEach(this.ignoreQuery, this);
             }
         };
         OstrioWebAnalytics.prototype.onPushEvent = function (callback) {

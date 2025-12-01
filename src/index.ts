@@ -56,14 +56,14 @@ const WARN = {
   fetchError: '[track] [fetch] Error:'
 } as const;
 
-export interface OstrioWebAnalyticsDynamincConfig {
+export interface OstrioWebAnalyticsDynamicConfig {
   trackHash?: boolean;
   trackQuery?: boolean;
   transport?: Transport;
   serviceUrl?: string;
 }
 
-export interface OstrioWebAnalyticsConfig extends OstrioWebAnalyticsDynamincConfig {
+export interface OstrioWebAnalyticsConfig extends OstrioWebAnalyticsDynamicConfig {
   auto?: boolean;
   trackErrors?: boolean;
   ignoredQueries?: Array<string>;
@@ -92,7 +92,6 @@ export class OstrioWebAnalytics {
   private readonly onTrackArr: TrackCb[] = [];
   private readonly onEventArr: EventCb[] = [];
   private readonly cachedErrors: Set<string> = new Set();
-  private readonly warn: (...args: unknown[]) => void;
   private readonly eventRemovers: EvtRemvr[] = [];
   private autoTimer: ReturnType<typeof setInterval> | null = null;
   private lastTrackTimestamp: number | false = false;
@@ -107,18 +106,8 @@ export class OstrioWebAnalytics {
 
     this.applySettings(cfg);
 
-    this.warn = function () {
-      if (typeof console === 'undefined') return;
-      const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
-      if (!fn) return;
-      const args = Array.from(arguments);
-      args.unshift('[ostrio]');
-      fn.apply(console, args);
-    };
-
     if (!this.sid || typeof this.sid !== 'string' || this.sid.length !== 17) {
-      this.warn(WARN.sidError);
-      return;
+      throw new Error(WARN.sidError);
     }
 
     if (this.auto) {
@@ -137,8 +126,7 @@ export class OstrioWebAnalytics {
     });
   }
 
-
-  public applySettings(cfg: OstrioWebAnalyticsDynamincConfig) {
+  public applySettings(cfg: OstrioWebAnalyticsDynamicConfig): void {
     if (typeof cfg.trackHash !== 'undefined') {
       this.trackHash = !(cfg.trackHash === false);
     }
@@ -152,14 +140,16 @@ export class OstrioWebAnalytics {
       this.serviceUrl = this.serviceUrl.endsWith('/') ? this.serviceUrl : `${this.serviceUrl}/`;
     }
 
-    if (cfg.transport) {
-      this.setTransport(cfg.transport);
-    }
+    this.setTransport(cfg.transport || this.transport);
   }
 
   public setTransport(t: Transport): void {
     if (SUPPORTED_TRANSPORTS.includes(t)) {
-      this.transport = t;
+      if (t === Transport.Fetch && typeof fetch !== 'function') {
+        this.transport = Transport.Img;
+      } else {
+        this.transport = t;
+      }
     }
   }
 
@@ -169,7 +159,7 @@ export class OstrioWebAnalytics {
 
   public ignorePaths(paths: Array<string | RegExp>): void {
     if (Array.isArray(paths)) {
-      paths.forEach(this.ignorePath.bind(this));
+      paths.forEach(this.ignorePath, this);
     }
   }
 
@@ -179,7 +169,7 @@ export class OstrioWebAnalytics {
 
   public ignoreQueries(queryKeys: Array<string>): void {
     if (Array.isArray(queryKeys)) {
-      queryKeys.forEach(this.ignoreQuery.bind(this));
+      queryKeys.forEach(this.ignoreQuery, this);
     }
   }
 
@@ -401,6 +391,15 @@ export class OstrioWebAnalytics {
       this.autoTimer = null;
     }
   }
+
+  private readonly warn = function (..._args: unknown[]) {
+    if (typeof console === 'undefined') return;
+    const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
+    if (!fn) return;
+    const args = Array.from(arguments);
+    args.unshift('[ostrio]');
+    fn.apply(console, args);
+  };
 }
 
 export default OstrioWebAnalytics;

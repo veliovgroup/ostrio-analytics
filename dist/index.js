@@ -70,14 +70,7 @@ class OstrioWebAnalytics {
         this.eventRemovers = [];
         this.autoTimer = null;
         this.lastTrackTimestamp = false;
-        const cfg = typeof opts === 'boolean' ? { auto: opts } : (opts || {});
-        this.sid = sid;
-        this.auto = !(cfg.auto === false);
-        this.trackErrors = !(cfg.trackErrors === false);
-        cfg.ignoredQueries && this.ignoreQueries(cfg.ignoredQueries);
-        cfg.ignoredPaths && this.ignorePaths(cfg.ignoredPaths);
-        this.applySettings(cfg);
-        this.warn = function () {
+        this.warn = function (..._args) {
             if (typeof console === 'undefined')
                 return;
             const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
@@ -87,9 +80,15 @@ class OstrioWebAnalytics {
             args.unshift('[ostrio]');
             fn.apply(console, args);
         };
+        const cfg = typeof opts === 'boolean' ? { auto: opts } : (opts || {});
+        this.sid = sid;
+        this.auto = !(cfg.auto === false);
+        this.trackErrors = !(cfg.trackErrors === false);
+        cfg.ignoredQueries && this.ignoreQueries(cfg.ignoredQueries);
+        cfg.ignoredPaths && this.ignorePaths(cfg.ignoredPaths);
+        this.applySettings(cfg);
         if (!this.sid || typeof this.sid !== 'string' || this.sid.length !== 17) {
-            this.warn(WARN.sidError);
-            return;
+            throw new Error(WARN.sidError);
         }
         if (this.auto) {
             this.initAutoTracking();
@@ -115,13 +114,16 @@ class OstrioWebAnalytics {
             this.serviceUrl = cfg.serviceUrl;
             this.serviceUrl = this.serviceUrl.endsWith('/') ? this.serviceUrl : `${this.serviceUrl}/`;
         }
-        if (cfg.transport) {
-            this.setTransport(cfg.transport);
-        }
+        this.setTransport(cfg.transport || this.transport);
     }
     setTransport(t) {
         if (SUPPORTED_TRANSPORTS.includes(t)) {
-            this.transport = t;
+            if (t === Transport.Fetch && typeof fetch !== 'function') {
+                this.transport = Transport.Img;
+            }
+            else {
+                this.transport = t;
+            }
         }
     }
     ignorePath(path) {
@@ -129,7 +131,7 @@ class OstrioWebAnalytics {
     }
     ignorePaths(paths) {
         if (Array.isArray(paths)) {
-            paths.forEach(this.ignorePath.bind(this));
+            paths.forEach(this.ignorePath, this);
         }
     }
     ignoreQuery(queryKey) {
@@ -137,7 +139,7 @@ class OstrioWebAnalytics {
     }
     ignoreQueries(queryKeys) {
         if (Array.isArray(queryKeys)) {
-            queryKeys.forEach(this.ignoreQuery.bind(this));
+            queryKeys.forEach(this.ignoreQuery, this);
         }
     }
     onPushEvent(callback) {
