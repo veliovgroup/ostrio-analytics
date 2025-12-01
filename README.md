@@ -1,6 +1,6 @@
 # Web Analytics by [ostr.io](https://ostr.io)
 
-[ostr.io](https://ostr.io) provides lightweight, privacy-respectful, real-time [web analytics](https://ostr.io/info/web-analytics) for modern SPAs and MPAs. The tracker works out-of-the-box with WordPress, WebFlow, React, Next.js, Vue, Nuxt, Svelte, Angular, Meteor/Blaze, Backbone, Ember, and vanilla JS.
+[ostr.io](https://ostr.io) provides lightweight, privacy-respectful, real-time [web analytics](https://ostr.io/info/web-analytics) for modern SPAs and MPAs. The tracker works out-of-the-box with all websites and webpages, including: WordPress, WebFlow, React, Next.js, Vue, Nuxt, Svelte, Angular, Meteor/Blaze, Backbone, Ember, and vanilla JS.
 
 ## Table of Contents
 
@@ -154,7 +154,9 @@ Use default settings or extend with additional `options` object
 ### Constructor
 
 ```ts
-new Analytics(trackingId: string, options?: OstrioWebAnalyticsConfig {
+new Analytics(trackingId: string, options?: OstrioWebAnalyticsConfig);
+
+interface OstrioWebAnalyticsConfig {
   auto?: boolean;            // default: true
   trackErrors?: boolean;     // default: true
   trackHash?: boolean;       // default: true
@@ -162,10 +164,10 @@ new Analytics(trackingId: string, options?: OstrioWebAnalyticsConfig {
   ignoredQueries?: string[]; // case-insensitive query keys to drop
   ignoredPaths?: (string|RegExp)[]; // '/path/*' prefix, '/path/' exact, or RegExp
   transport?: 'fetch' | 'beacon' | 'img';  // default: 'fetch'
-});
+}
 ```
 
-> [!NOTE]
+> [!IMPORTANT]
 > Constructor throws `Error('[init] {{trackingId}} is missing or incorrect!')` if the `trackingId` is not a 17-char string
 
 - `trackingId` {*string*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
@@ -192,12 +194,13 @@ import Analytics from "ostrio-analytics/source";
 const analyticsTracker = new Analytics('{{trackingId}}');
 
 // CHANGE SETTINGS DURING RUNTIME
-analyticsTracker.applySettings({
+analyticsTracker.applySettings(settings: OstrioWebAnalyticsDynamicConfig);
+interface OstrioWebAnalyticsDynamicConfig {
   trackHash?: boolean;
   trackQuery?: boolean;
   transport?: Transport;
   serviceUrl?: string;
-} as OstrioWebAnalyticsDynamicConfig);
+}
 
 // CHANGE TRANSPORT DURING RUNTIME
 analyticsTracker.setTransport(Transport); // [Transport.Fetch, Transport.Beacon, Transport.Img]
