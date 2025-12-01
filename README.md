@@ -181,7 +181,7 @@ interface OstrioWebAnalyticsConfig {
 - `options.transport` - {*'fetch' | 'beacon' | 'img'*} - Set preferred transport; Default: `fetch`
 
 > [!TIP]
-> After initializing `new Analytics()` — it's good to go, visitor navigation will be collected and reported in ostr.io analytics. For custom events - see below.*
+> After initializing `new Analytics()` — it's good to go, visitor navigation will be collected and reported in ostr.io analytics. For `{auto: false}`, additional settings, and custom events - see below.
 
 ---
 

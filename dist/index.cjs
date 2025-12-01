@@ -77,6 +77,7 @@ class OstrioWebAnalytics {
         this.warn = function (..._args) {
             if (typeof console === 'undefined')
                 return;
+            /* eslint-disable no-console,no-nested-ternary */
             const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
             if (!fn)
                 return;

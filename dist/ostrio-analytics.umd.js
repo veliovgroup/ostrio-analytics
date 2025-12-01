@@ -79,6 +79,7 @@
             this.warn = function () {
                 if (typeof console === 'undefined')
                     return;
+                /* eslint-disable no-console,no-nested-ternary */
                 var fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
                 if (!fn)
                     return;

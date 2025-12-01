@@ -394,6 +394,7 @@ export class OstrioWebAnalytics {
 
   private readonly warn = function (..._args: unknown[]) {
     if (typeof console === 'undefined') return;
+    /* eslint-disable no-console,no-nested-ternary */
     const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
     if (!fn) return;
     const args = Array.from(arguments);
