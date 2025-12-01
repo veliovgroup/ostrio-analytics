@@ -73,7 +73,7 @@ export interface OstrioWebAnalyticsConfig extends OstrioWebAnalyticsDynamicConfi
 type EvtRemvr = () => void;
 type FetchCb = () => void;
 type TrackCb = () => void;
-type EventCb = (key: string, value: number|string) => void;
+type EventCb = (key: string, value: number | string) => void;
 
 export class OstrioWebAnalytics {
   public readonly sid: string;
@@ -185,7 +185,7 @@ export class OstrioWebAnalytics {
     }
   }
 
-  public pushEvent(rawKey: string, rawValue: number|string): void {
+  public pushEvent(rawKey: string, rawValue: number | string): void {
     let key = String(rawKey).trim();
     let value = String(rawValue).trim();
 
@@ -312,7 +312,7 @@ export class OstrioWebAnalytics {
 
   private initGlobalErrors(): void {
     const prev = window.onerror as OnErrorEventHandlerNonNull | null;
-    window.onerror = ((msg: Event|string, url: string, line: number, column: number, error: Error): void => {
+    window.onerror = ((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
       const m = String(msg || DEFAULTS.globalError.msg);
       const u = String(url || DEFAULTS.globalError.url);
       const ln = String(line || DEFAULTS.globalError.line);
@@ -392,7 +392,7 @@ export class OstrioWebAnalytics {
     }
   }
 
-  private readonly warn = function (..._args: unknown[]) {
+  private readonly warn = function(..._args: unknown[]) {
     if (typeof console === 'undefined') return;
     /* eslint-disable no-console,no-nested-ternary */
     const fn = typeof console.warn === 'function' ? console.warn : typeof console.log === 'function' ? console.log : null;
