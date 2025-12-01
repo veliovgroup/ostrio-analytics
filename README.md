@@ -75,19 +75,17 @@ To get your `trackingId`, open the [Analytics](https://ostr.io/service/analytics
 
 > [!TIP]
 > Easiest way — no build tooling required.
-> See "integration guide" in ostr.io analytics panel to copy-paste `<script>` element
+> See "integration guide" at `ostr.io` analytics panel to copy-paste `<script>` element
 
 ```html
-<!--
-After including script-tag
-analytics automatically executes in 'auto' mode,
-its instance is available in global scope as `OstrioTracker`
-Example: OstrioTracker.pushEvent(foo, bar);
--->
 <link rel="preconnect" href="https://analytics.ostr.io/" crossorigin>
 <link rel="dns-prefetch" href="https://analytics.ostr.io/">
 <script async defer src="https://analytics.ostr.io/{{trackingId}}.js"></script>
 ```
+
+> [!IMPORTANT]
+> When tracking code is loaded from `analytics.ostr.io` via script-tag it will automatically execute in "auto" mode and will be available in the global scope as `OstrioTracker`.
+> Example: `OstrioTracker.pushEvent(foo, bar);`
 
 ---
 
