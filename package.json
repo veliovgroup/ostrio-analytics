@@ -33,7 +33,7 @@
     "build:rollup": "rollup -c",
     "build": "npm run clean && npm run build:rollup && npm run build:types",
     "prepublishOnly": "npm run build",
-    "test": "node --loader ts-node/esm ./node_modules/mocha/bin/mocha.js --extension ts 'test/**/*.spec.ts'",
+    "test": "TS_NODE_PROJECT=tsconfig.test.json node --loader ts-node/esm ./node_modules/mocha/bin/mocha.js --extension ts 'test/**/*.spec.ts'",
     "lint": "eslint ./src/*"
   },
   "repository": {

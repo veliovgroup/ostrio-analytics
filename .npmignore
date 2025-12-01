@@ -8,7 +8,10 @@
 .npm
 .versions
 docs
-lib
+test
 node_modules
 npm-debug.log*
 package.js
+eslint.config.mjs
+rollup.config.mjs
+tsconfig.test.json
