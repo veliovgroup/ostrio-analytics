@@ -9,8 +9,8 @@
 - [Installation](#installation)
   - [`<script>` tag](#script-tag)
   - [NPM/YARN](#npm)
-  - [NPM](#npm)
   - [Meteor.js](https://github.com/veliovgroup/ostrio-analytics/blob/master/docs/meteorjs.md)
+  - [Minified version](#minified-version)
 - [Usage](#usage)
   - [Constructor: `new Analytics()`](#constructor)
   - [All Methods](#all-methods)
@@ -31,17 +31,17 @@
 
 ## Why ostr.io analytics?
 
-- 👐 Open-source tracking code.
-- 📦 Lightweight.
-- 🚀 Real-time metrics.
-- 😎 No DOM mutations; no heavy CPU tasks; no extra script chains.
-- 📡 Uses the [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) when available; falls back gracefully.
-- 🤝 SPA-friendly: HTML5 History API support out-of-the-box.
-- ⚡️ [AMP tracking](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md).
-- 🛑 [AdBlock detection](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md).
-- 🔍 Transparent data collection; GDPR/CCPA-aligned controls.
-- 🙆 Easy, hosted **opt-out** for your users.
-- 🐞 Global runtime error reporting (including `unhandled` *Promise* rejections).
+- 👐 Open-source tracking code
+- 📦 Lightweight
+- 🚀 Real-time metrics
+- 😎 No DOM mutations; no heavy CPU tasks; no extra script chains
+- 📡 Supports various transports: `fetch`, `img`, `beacon`; falls back gracefully
+- 🤝 SPA-friendly: HTML5 History API and navigation events support out-of-the-box
+- ⚡️ [AMP tracking](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md)
+- 🛑 [AdBlock detection](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md)
+- 🔍 Transparent data collection; GDPR/CCPA-aligned controls
+- 🙆 Easy, hosted **opt-out** for end-users
+- 🐞 Global runtime error reporting (including `unhandled` *Promise* rejections)
 
 ## What is tracked
 
@@ -117,12 +117,26 @@ const analyticsTracker = new analyticsClass('{{trackingId}}');
 
 ---
 
-### Minifed version
+### Minified version
 
-Copy-paste minified version of the analytics script.
+Copy-paste minified version of the analytics script. Or use Unpkg/JSDelivr to load minified version from CDN.
+
+#### Load from Unpkg
+
+```html
+<script src="https://unpkg.com/ostrio-analytics@2.0.0/dist/ostrio-analytics.min.js"></script>
+```
+
+#### Load from JSDelivr
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ostrio-analytics@2.0.0/dist/ostrio-analytics.min.js"></script>
+```
+
+#### Copy-paste minified analytics script
 
 > [!NOTE]
-> After adding minified analytics code to a project — it will be available as `OstrioTrackerClass` in the global scope
+> After adding minified analytics code to a project (using any of the methods above) — it will be available as `OstrioTrackerClass` in the global scope
 
 ```js
 // Example:
@@ -133,14 +147,14 @@ const analyticsTracker = new window.OstrioTrackerClass('{{trackingId}}');
 
 ## Usage
 
-Use one-liner or extend with additional `options` object
+Use default settings or extend with additional `options` object
 
 ---
 
 ### Constructor
 
 ```ts
-new Analytics(trackingId: string, options?: {
+new Analytics(trackingId: string, options?: OstrioWebAnalyticsConfig {
   auto?: boolean;            // default: true
   trackErrors?: boolean;     // default: true
   trackHash?: boolean;       // default: true
@@ -148,8 +162,11 @@ new Analytics(trackingId: string, options?: {
   ignoredQueries?: string[]; // case-insensitive query keys to drop
   ignoredPaths?: (string|RegExp)[]; // '/path/*' prefix, '/path/' exact, or RegExp
   transport?: 'fetch' | 'beacon' | 'img';  // default: 'fetch'
-} as OstrioWebAnalyticsConfig);
+});
 ```
+
+> [!NOTE]
+> Constructor throws `Error('[init] {{trackingId}} is missing or incorrect!')` if the `trackingId` is not a 17-char string
 
 - `trackingId` {*string*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
 - `options` - {*OstrioWebAnalyticsConfig*} - [Optional]
@@ -180,7 +197,7 @@ analyticsTracker.applySettings({
   trackQuery?: boolean;
   transport?: Transport;
   serviceUrl?: string;
-} as OstrioWebAnalyticsDynamincConfig);
+} as OstrioWebAnalyticsDynamicConfig);
 
 // CHANGE TRANSPORT DURING RUNTIME
 analyticsTracker.setTransport(Transport); // [Transport.Fetch, Transport.Beacon, Transport.Img]
@@ -188,13 +205,13 @@ analyticsTracker.setTransport(Transport); // [Transport.Fetch, Transport.Beacon,
 // ADD IGNORED PATH DURING RUNTIME
 analyticsTracker.ignorePath(path: string | RegExp);
 
-// ADD MULTIPLE IGNORED PATHS DURING RUNBTIME
+// ADD MULTIPLE IGNORED PATHS DURING RUNTIME
 analyticsTracker.ignorePaths(paths: Array<string | RegExp>);
 
 // ADD IGNORED GET-QUERY DURING RUNTIME
 analyticsTracker.ignoreQuery(queryKey: string);
 
-// ADD  MULTIPLEIGNORED GET-QUERIES DURING RUNTIME
+// ADD MULTIPLE IGNORED GET-QUERIES DURING RUNTIME
 analyticsTracker.ignoreQueries(queryKeys: Array<string>);
 
 // ADD HOOK FOR .pushEvent() CALLS
@@ -323,7 +340,7 @@ Examples:
 ```js
 // Callback will be executed on every browser navigation and upon calling `.track()` method
 analyticsTracker.onTrack(() => {
-  console.log('Tacking a session'); // Tacking a session
+  console.log('Tracking a session'); // Tracking a session
 });
 ```
 
@@ -339,7 +356,7 @@ analyticsTracker.destroy();
 
 ## Advanced
 
-Explode advanced settings and its usage
+Explore advanced settings and its usage
 
 ---
 
@@ -477,7 +494,7 @@ analyticsTracker.onPushEvent((name, value) => {
 
 Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking-data to Google Tag Manager upon navigation or event.
 
-In your `<head>` add Google Tag Manager as instructed:
+In page's `<head>` add Google Tag Manager as instructed:
 
 ```html
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
@@ -507,16 +524,22 @@ analyticsTracker.onPushEvent((name, value) => {
 });
 ```
 
+## Compliance
+
+- [ostr.io GDPR](https://ostr.io/info/gdpr)
+- [ostr.io CCPA](https://ostr.io/info/privacy-policy#ccpaandthirdpartydisclosure)
+- [ostr.io Privacy Policy](https://ostr.io/info/privacy-policy)
+
 ---
 
 ### Opt-out for end-users
 
 > [!TIP]
-> Provide a one-click opt-out link in your legal/settings pages to follow the best privacy experience practices
+> Provide a one-click opt-out link in project's legal/settings pages to follow the best privacy experience practices
 
 ```plain
 https://analytics.ostr.io/settings/manage/opt-out/
 ```
 
-- Add **[one-click opt-out](https://analytics.ostr.io/settings/manage/opt-out/) link** to legal documents and "settings" page.
+- Add **[one-click opt-out](https://analytics.ostr.io/settings/manage/opt-out/) link** to legal documents and "settings" page
 - **[Click here](https://analytics.ostr.io/settings/manage/)** to check your browser current settings
