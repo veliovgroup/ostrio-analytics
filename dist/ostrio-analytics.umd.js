@@ -266,13 +266,16 @@
         OstrioWebAnalytics.prototype.initGlobalErrors = function () {
             var _this = this;
             var prev = window.onerror;
+            var active = true;
             var handler = (function (msg, url, line, column, error) {
-                var m = String(msg || DEFAULTS.globalError.msg);
-                var u = String(url || DEFAULTS.globalError.url);
-                var ln = String(line || DEFAULTS.globalError.line);
-                var col = String(column || DEFAULTS.globalError.column);
-                if (u.includes(_this.loc.origin)) {
-                    _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(u.replace(_this.loc.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
+                if (active) {
+                    var m = String(msg || DEFAULTS.globalError.msg);
+                    var u = String(url || DEFAULTS.globalError.url);
+                    var ln = String(line || DEFAULTS.globalError.line);
+                    var col = String(column || DEFAULTS.globalError.column);
+                    if (u.includes(_this.loc.origin)) {
+                        _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(u.replace(_this.loc.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
+                    }
                 }
                 if (typeof prev === 'function') {
                     prev.call(window, msg, url, line, column, error);
@@ -280,6 +283,7 @@
             });
             window.onerror = handler;
             this.eventRemovers.push(function () {
+                active = false;
                 if (window.onerror === handler) {
                     window.onerror = prev;
                 }

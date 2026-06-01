@@ -230,6 +230,26 @@ describe('OstrioWebAnalytics', () => {
     expect(window.onerror).to.equal(previous);
   });
 
+  it('destroyed error handler does not report through later handler chains', () => {
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+    const fetchStub: sinon.SinonStub = (global as any).fetch;
+    const aHandler = window.onerror as OnErrorEventHandlerNonNull;
+
+    const laterHandler = sinon.spy((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
+      aHandler(msg, url, line, column, error);
+    });
+    window.onerror = laterHandler as OnErrorEventHandlerNonNull;
+
+    a.destroy();
+    fetchStub.resetHistory();
+
+    (window.onerror as OnErrorEventHandlerNonNull)('boom', `${window.location.origin}/app.js`, 1, 2, new Error('boom'));
+
+    expect(laterHandler.callCount).to.equal(1);
+    expect(window.onerror).to.equal(laterHandler);
+    expect(fetchStub.callCount).to.equal(0);
+  });
+
   describe('transports — calls underlying implementation', () => {
     it('uses fetch when transport=Fetch', () => {
       const fetchStub: sinon.SinonStub = (global as any).fetch;

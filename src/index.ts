@@ -315,14 +315,17 @@ export class OstrioWebAnalytics {
 
   private initGlobalErrors(): void {
     const prev = window.onerror as OnErrorEventHandlerNonNull | null;
+    let active = true;
     const handler = ((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
-      const m = String(msg || DEFAULTS.globalError.msg);
-      const u = String(url || DEFAULTS.globalError.url);
-      const ln = String(line || DEFAULTS.globalError.line);
-      const col = String(column || DEFAULTS.globalError.column);
+      if (active) {
+        const m = String(msg || DEFAULTS.globalError.msg);
+        const u = String(url || DEFAULTS.globalError.url);
+        const ln = String(line || DEFAULTS.globalError.line);
+        const col = String(column || DEFAULTS.globalError.column);
 
-      if (u.includes(this.loc.origin)) {
-        this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${u.replace(this.loc.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+        if (u.includes(this.loc.origin)) {
+          this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${u.replace(this.loc.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+        }
       }
 
       if (typeof prev === 'function') {
@@ -332,6 +335,7 @@ export class OstrioWebAnalytics {
 
     window.onerror = handler;
     this.eventRemovers.push((): void => {
+      active = false;
       if (window.onerror === handler) {
         window.onerror = prev;
       }

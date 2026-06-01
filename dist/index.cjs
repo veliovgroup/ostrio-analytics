@@ -258,13 +258,16 @@ class OstrioWebAnalytics {
     }
     initGlobalErrors() {
         const prev = window.onerror;
+        let active = true;
         const handler = ((msg, url, line, column, error) => {
-            const m = String(msg || DEFAULTS.globalError.msg);
-            const u = String(url || DEFAULTS.globalError.url);
-            const ln = String(line || DEFAULTS.globalError.line);
-            const col = String(column || DEFAULTS.globalError.column);
-            if (u.includes(this.loc.origin)) {
-                this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${u.replace(this.loc.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+            if (active) {
+                const m = String(msg || DEFAULTS.globalError.msg);
+                const u = String(url || DEFAULTS.globalError.url);
+                const ln = String(line || DEFAULTS.globalError.line);
+                const col = String(column || DEFAULTS.globalError.column);
+                if (u.includes(this.loc.origin)) {
+                    this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${u.replace(this.loc.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+                }
             }
             if (typeof prev === 'function') {
                 prev.call(window, msg, url, line, column, error);
@@ -272,6 +275,7 @@ class OstrioWebAnalytics {
         });
         window.onerror = handler;
         this.eventRemovers.push(() => {
+            active = false;
             if (window.onerror === handler) {
                 window.onerror = prev;
             }
