@@ -249,6 +249,26 @@ describe('OstrioWebAnalytics', () => {
     expect(window.onerror).to.equal(previous);
   });
 
+  it('restores original onerror when trackers are destroyed out of install order', () => {
+    const original = (() => false) as OnErrorEventHandler;
+    window.onerror = original;
+
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+    const aHandler = window.onerror as OnErrorEventHandlerNonNull;
+    const b = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+    const fetchStub: sinon.SinonStub = (global as any).fetch;
+
+    a.destroy();
+    expect(window.onerror).to.not.equal(original);
+
+    b.destroy();
+    expect(window.onerror).to.equal(original);
+
+    fetchStub.resetHistory();
+    aHandler('boom', `${window.location.origin}/app.js`, 1, 2, new Error('boom'));
+    expect(fetchStub.callCount).to.equal(0);
+  });
+
   it('global error handler preserves previous onerror return value', () => {
     window.onerror = (() => true) as OnErrorEventHandler;
     const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });

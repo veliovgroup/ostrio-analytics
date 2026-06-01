@@ -487,7 +487,7 @@ In your `<head>` add Google Analytics as instructed:
 
 ```js
 import Analytics from 'ostrio-analytics';
-const analyticsTracker = new Analytics('{{trackingId}}');
+const analyticsTracker = new Analytics('{{trackingId}}', { auto: false });
 
 analyticsTracker.onTrack(() => {
   // Track navigation with Google Analytics
@@ -507,6 +507,8 @@ analyticsTracker.onPushEvent((name, value) => {
     eventAction: value
   });
 });
+
+analyticsTracker.track();
 ```
 
 ---
@@ -528,7 +530,7 @@ In page's `<head>` add Google tag as instructed:
 
 ```js
 import Analytics from 'ostrio-analytics';
-const analyticsTracker = new Analytics('{{trackingId}}');
+const analyticsTracker = new Analytics('{{trackingId}}', { auto: false });
 
 analyticsTracker.onTrack(() => {
   // Track navigation with Google tag
@@ -543,6 +545,8 @@ analyticsTracker.onPushEvent((name, value) => {
   // Send events to Google tag
   gtag('event', name, { value });
 });
+
+analyticsTracker.track();
 ```
 
 ## Compliance

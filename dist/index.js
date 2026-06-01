@@ -52,6 +52,18 @@ const WARN = {
     pushEventMissing: '[pushEvent] Can\'t add event without key or value!',
     fetchError: '[track] [fetch] Error:'
 };
+const errorHandlerStates = new WeakMap();
+const getRestorableOnError = (handler) => {
+    let next = handler;
+    while (typeof next === 'function') {
+        const state = errorHandlerStates.get(next);
+        if (!state || state.active) {
+            return next;
+        }
+        next = state.previous;
+    }
+    return next;
+};
 class OstrioWebAnalytics {
     constructor(sid, opts) {
         this.version = DEFAULTS.version;
@@ -257,10 +269,12 @@ class OstrioWebAnalytics {
         autoTrack();
     }
     initGlobalErrors() {
-        const prev = window.onerror;
-        let active = true;
+        const state = {
+            previous: window.onerror,
+            active: true
+        };
         const handler = ((msg, url, line, column, error) => {
-            if (active) {
+            if (state.active) {
                 const m = String(msg || DEFAULTS.globalError.msg);
                 const u = String(url || DEFAULTS.globalError.url);
                 const ln = String(line || DEFAULTS.globalError.line);
@@ -270,16 +284,17 @@ class OstrioWebAnalytics {
                     this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${source.href.replace(source.origin, '')} at ${this.loc.href}:${ln}:${col}`);
                 }
             }
-            if (typeof prev === 'function') {
-                return prev.call(window, msg, url, line, column, error);
+            if (typeof state.previous === 'function') {
+                return state.previous.call(window, msg, url, line, column, error);
             }
             return undefined;
         });
+        errorHandlerStates.set(handler, state);
         window.onerror = handler;
         this.eventRemovers.push(() => {
-            active = false;
+            state.active = false;
             if (window.onerror === handler) {
-                window.onerror = prev;
+                window.onerror = getRestorableOnError(state.previous);
             }
         });
         this.on(window, EventName.UnhandledRejection, (evt) => {

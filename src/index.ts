@@ -76,6 +76,25 @@ type EvtRemvr = () => void;
 type FetchCb = () => void;
 type TrackCb = () => void;
 type EventCb = (key: string, value: number | string) => void;
+interface ErrorHandlerState {
+  previous: OnErrorEventHandler;
+  active: boolean;
+}
+
+const errorHandlerStates = new WeakMap<OnErrorEventHandlerNonNull, ErrorHandlerState>();
+
+const getRestorableOnError = (handler: OnErrorEventHandler): OnErrorEventHandler => {
+  let next = handler;
+  while (typeof next === 'function') {
+    const state = errorHandlerStates.get(next);
+    if (!state || state.active) {
+      return next;
+    }
+    next = state.previous;
+  }
+
+  return next;
+};
 
 export class OstrioWebAnalytics {
   public readonly sid: string;
@@ -319,10 +338,12 @@ export class OstrioWebAnalytics {
   }
 
   private initGlobalErrors(): void {
-    const prev = window.onerror as OnErrorEventHandlerNonNull | null;
-    let active = true;
+    const state: ErrorHandlerState = {
+      previous: window.onerror,
+      active: true
+    };
     const handler = ((msg: Event | string, url?: string, line?: number, column?: number, error?: Error): boolean | void => {
-      if (active) {
+      if (state.active) {
         const m = String(msg || DEFAULTS.globalError.msg);
         const u = String(url || DEFAULTS.globalError.url);
         const ln = String(line || DEFAULTS.globalError.line);
@@ -334,18 +355,19 @@ export class OstrioWebAnalytics {
         }
       }
 
-      if (typeof prev === 'function') {
-        return prev.call(window, msg, url, line, column, error);
+      if (typeof state.previous === 'function') {
+        return state.previous.call(window, msg, url, line, column, error);
       }
 
       return undefined;
     }) as OnErrorEventHandlerNonNull;
 
+    errorHandlerStates.set(handler, state);
     window.onerror = handler;
     this.eventRemovers.push((): void => {
-      active = false;
+      state.active = false;
       if (window.onerror === handler) {
-        window.onerror = prev;
+        window.onerror = getRestorableOnError(state.previous);
       }
     });
 

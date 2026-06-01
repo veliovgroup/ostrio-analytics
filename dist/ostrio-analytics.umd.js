@@ -58,6 +58,18 @@
         pushEventMissing: '[pushEvent] Can\'t add event without key or value!',
         fetchError: '[track] [fetch] Error:'
     };
+    var errorHandlerStates = new WeakMap();
+    var getRestorableOnError = function (handler) {
+        var next = handler;
+        while (typeof next === 'function') {
+            var state = errorHandlerStates.get(next);
+            if (!state || state.active) {
+                return next;
+            }
+            next = state.previous;
+        }
+        return next;
+    };
     var OstrioWebAnalytics = /** @class */ (function () {
         function OstrioWebAnalytics(sid, opts) {
             this.version = DEFAULTS.version;
@@ -269,10 +281,12 @@
         };
         OstrioWebAnalytics.prototype.initGlobalErrors = function () {
             var _this = this;
-            var prev = window.onerror;
-            var active = true;
+            var state = {
+                previous: window.onerror,
+                active: true
+            };
             var handler = (function (msg, url, line, column, error) {
-                if (active) {
+                if (state.active) {
                     var m = String(msg || DEFAULTS.globalError.msg);
                     var u = String(url || DEFAULTS.globalError.url);
                     var ln = String(line || DEFAULTS.globalError.line);
@@ -282,16 +296,17 @@
                         _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(source.href.replace(source.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
                     }
                 }
-                if (typeof prev === 'function') {
-                    return prev.call(window, msg, url, line, column, error);
+                if (typeof state.previous === 'function') {
+                    return state.previous.call(window, msg, url, line, column, error);
                 }
                 return undefined;
             });
+            errorHandlerStates.set(handler, state);
             window.onerror = handler;
             this.eventRemovers.push(function () {
-                active = false;
+                state.active = false;
                 if (window.onerror === handler) {
-                    window.onerror = prev;
+                    window.onerror = getRestorableOnError(state.previous);
                 }
             });
             this.on(window, EventName.UnhandledRejection, function (evt) {
