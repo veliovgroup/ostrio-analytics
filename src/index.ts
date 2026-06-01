@@ -255,7 +255,7 @@ export class OstrioWebAnalytics {
         query.set(QUERY.href, this.current.slice(0, LIMITS.href));
         query.set(QUERY.title, document.title.trim().slice(0, LIMITS.title));
 
-        if (document.referrer && document.referrer.indexOf(this.loc.origin) === -1) {
+        if (this.isExternalReferrer(document.referrer)) {
           query.set(QUERY.referrer, document.referrer.trim().slice(0, LIMITS.referrer));
         }
 
@@ -273,16 +273,14 @@ export class OstrioWebAnalytics {
   private fetch(query: URLSearchParams, cb: FetchCb): void {
     const url = `${this.serviceUrl}${this.sid}.gif?${query.toString()}`;
 
-    if (this.transport === Transport.Beacon && 'sendBeacon' in navigator) {
+    if (this.transport === Transport.Beacon && typeof navigator.sendBeacon === 'function') {
       navigator.sendBeacon(url);
       cb();
       return;
     }
 
-    if (this.transport === Transport.Img) {
-      let imageLoader: HTMLImageElement | null = 'Image' in window ? new Image() : (document.createElement('img') as HTMLImageElement);
-      imageLoader.onload = (): void => { imageLoader = null; };
-      imageLoader.src = url;
+    if (this.transport === Transport.Img || typeof fetch !== 'function') {
+      this.sendImage(url);
       cb();
       return;
     }
@@ -291,6 +289,12 @@ export class OstrioWebAnalytics {
       this.warn(WARN.fetchError, err);
       cb();
     });
+  }
+
+  private sendImage(url: string): void {
+    let imageLoader: HTMLImageElement | null = 'Image' in window ? new Image() : (document.createElement('img') as HTMLImageElement);
+    imageLoader.onload = (): void => { imageLoader = null; };
+    imageLoader.src = url;
   }
 
   private initAutoTracking(): void {
@@ -316,7 +320,7 @@ export class OstrioWebAnalytics {
   private initGlobalErrors(): void {
     const prev = window.onerror as OnErrorEventHandlerNonNull | null;
     let active = true;
-    const handler = ((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
+    const handler = ((msg: Event | string, url?: string, line?: number, column?: number, error?: Error): boolean | void => {
       if (active) {
         const m = String(msg || DEFAULTS.globalError.msg);
         const u = String(url || DEFAULTS.globalError.url);
@@ -329,8 +333,10 @@ export class OstrioWebAnalytics {
       }
 
       if (typeof prev === 'function') {
-        prev.call(window, msg, url, line, column, error);
+        return prev.call(window, msg, url, line, column, error);
       }
+
+      return undefined;
     }) as OnErrorEventHandlerNonNull;
 
     window.onerror = handler;
@@ -374,6 +380,18 @@ export class OstrioWebAnalytics {
       }
     }
     return false;
+  }
+
+  private isExternalReferrer(referrer: string): boolean {
+    if (!referrer.trim()) {
+      return false;
+    }
+
+    try {
+      return new URL(referrer).origin !== this.loc.origin;
+    } catch (_err) {
+      return true;
+    }
   }
 
   private getCurrentUrl() {

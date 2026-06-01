@@ -53,9 +53,11 @@ export declare class OstrioWebAnalytics {
     track(): boolean;
     private send;
     private fetch;
+    private sendImage;
     private initAutoTracking;
     private initGlobalErrors;
     private isIgnored;
+    private isExternalReferrer;
     private getCurrentUrl;
     destroy(): void;
     private readonly warn;

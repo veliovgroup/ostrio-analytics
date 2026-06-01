@@ -167,6 +167,25 @@ describe('OstrioWebAnalytics', () => {
     expect(q.get('v')).to.equal(String(a.version));
   });
 
+  it('tracks external referrer that contains current origin in its query string', () => {
+    cleanup();
+    cleanup = globalJsdom('', {
+      url: 'https://ostr.io/page',
+      referrer: 'https://example.com/?next=https://ostr.io/'
+    });
+    document.title = 'T';
+    (global as any).fetch = sinon.stub().resolves({});
+
+    const a = new (Analytics as any)(VALID_ID, { auto: false });
+    a.track();
+    clock.tick(70);
+
+    const fetchStub: sinon.SinonStub = (global as any).fetch;
+    const url = fetchStub.lastCall.args[0] as string;
+    const q = getQueryFromUrl(url);
+    expect(q.get('1')).to.equal('https://example.com/?next=https://ostr.io/');
+  });
+
   it('beacon transport uses navigator.sendBeacon', () => {
     const a = new (Analytics as any)(VALID_ID, { auto: false, transport: Transport.Beacon });
     const sendBeacon = (global as any).navigator.sendBeacon as sinon.SinonStub;
@@ -228,6 +247,16 @@ describe('OstrioWebAnalytics', () => {
 
     a.destroy();
     expect(window.onerror).to.equal(previous);
+  });
+
+  it('global error handler preserves previous onerror return value', () => {
+    window.onerror = (() => true) as OnErrorEventHandler;
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+
+    const result = (window.onerror as OnErrorEventHandlerNonNull)('boom', `${window.location.origin}/app.js`, 1, 2, new Error('boom'));
+
+    expect(result).to.equal(true);
+    a.destroy();
   });
 
   it('destroyed error handler does not report through later handler chains', () => {
@@ -300,6 +329,26 @@ describe('OstrioWebAnalytics', () => {
 
       expect(fetchStub.callCount).to.equal(1);
       expect(images.length).to.equal(0);
+    });
+
+    it('falls back to Image when transport=Beacon but sendBeacon and fetch are unavailable', () => {
+      const savedFetch = (global as any).fetch;
+      const images: any[] = (global as any).__images;
+      images.length = 0;
+      (global as any).fetch = undefined;
+
+      const nav: any = globalThis.navigator;
+      if (beaconStub && beaconStub.restore) { beaconStub.restore(); }
+      delete nav.sendBeacon;
+
+      const a = new (Analytics as any)(VALID_ID, { auto: false, transport: Transport.Beacon });
+      a.track();
+      clock.tick(70);
+
+      expect(images.length).to.equal(1);
+      expect((images[0] as any).__src.includes('.gif?')).to.equal(true);
+
+      (global as any).fetch = savedFetch;
     });
 
     it('uses Image when transport=Img', () => {

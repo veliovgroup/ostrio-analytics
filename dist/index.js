@@ -207,7 +207,7 @@ class OstrioWebAnalytics {
                 this.lastTrackTimestamp = Date.now();
                 query.set(QUERY.href, this.current.slice(0, LIMITS.href));
                 query.set(QUERY.title, document.title.trim().slice(0, LIMITS.title));
-                if (document.referrer && document.referrer.indexOf(this.loc.origin) === -1) {
+                if (this.isExternalReferrer(document.referrer)) {
                     query.set(QUERY.referrer, document.referrer.trim().slice(0, LIMITS.referrer));
                 }
                 this.fetch(query, () => {
@@ -220,15 +220,13 @@ class OstrioWebAnalytics {
     }
     fetch(query, cb) {
         const url = `${this.serviceUrl}${this.sid}.gif?${query.toString()}`;
-        if (this.transport === Transport.Beacon && 'sendBeacon' in navigator) {
+        if (this.transport === Transport.Beacon && typeof navigator.sendBeacon === 'function') {
             navigator.sendBeacon(url);
             cb();
             return;
         }
-        if (this.transport === Transport.Img) {
-            let imageLoader = 'Image' in window ? new Image() : document.createElement('img');
-            imageLoader.onload = () => { imageLoader = null; };
-            imageLoader.src = url;
+        if (this.transport === Transport.Img || typeof fetch !== 'function') {
+            this.sendImage(url);
             cb();
             return;
         }
@@ -236,6 +234,11 @@ class OstrioWebAnalytics {
             this.warn(WARN.fetchError, err);
             cb();
         });
+    }
+    sendImage(url) {
+        let imageLoader = 'Image' in window ? new Image() : document.createElement('img');
+        imageLoader.onload = () => { imageLoader = null; };
+        imageLoader.src = url;
     }
     initAutoTracking() {
         const autoTrack = () => {
@@ -266,8 +269,9 @@ class OstrioWebAnalytics {
                 }
             }
             if (typeof prev === 'function') {
-                prev.call(window, msg, url, line, column, error);
+                return prev.call(window, msg, url, line, column, error);
             }
+            return undefined;
         });
         window.onerror = handler;
         this.eventRemovers.push(() => {
@@ -309,6 +313,17 @@ class OstrioWebAnalytics {
             }
         }
         return false;
+    }
+    isExternalReferrer(referrer) {
+        if (!referrer.trim()) {
+            return false;
+        }
+        try {
+            return new URL(referrer).origin !== this.loc.origin;
+        }
+        catch (_err) {
+            return true;
+        }
     }
     getCurrentUrl() {
         const url = new URL(this.loc.href);

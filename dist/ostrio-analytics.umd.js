@@ -216,7 +216,7 @@
                     _this.lastTrackTimestamp = Date.now();
                     query.set(QUERY.href, _this.current.slice(0, LIMITS.href));
                     query.set(QUERY.title, document.title.trim().slice(0, LIMITS.title));
-                    if (document.referrer && document.referrer.indexOf(_this.loc.origin) === -1) {
+                    if (_this.isExternalReferrer(document.referrer)) {
                         query.set(QUERY.referrer, document.referrer.trim().slice(0, LIMITS.referrer));
                     }
                     _this.fetch(query, function () {
@@ -230,15 +230,13 @@
         OstrioWebAnalytics.prototype.fetch = function (query, cb) {
             var _this = this;
             var url = "".concat(this.serviceUrl).concat(this.sid, ".gif?").concat(query.toString());
-            if (this.transport === Transport.Beacon && 'sendBeacon' in navigator) {
+            if (this.transport === Transport.Beacon && typeof navigator.sendBeacon === 'function') {
                 navigator.sendBeacon(url);
                 cb();
                 return;
             }
-            if (this.transport === Transport.Img) {
-                var imageLoader_1 = 'Image' in window ? new Image() : document.createElement('img');
-                imageLoader_1.onload = function () { imageLoader_1 = null; };
-                imageLoader_1.src = url;
+            if (this.transport === Transport.Img || typeof fetch !== 'function') {
+                this.sendImage(url);
                 cb();
                 return;
             }
@@ -246,6 +244,11 @@
                 _this.warn(WARN.fetchError, err);
                 cb();
             });
+        };
+        OstrioWebAnalytics.prototype.sendImage = function (url) {
+            var imageLoader = 'Image' in window ? new Image() : document.createElement('img');
+            imageLoader.onload = function () { imageLoader = null; };
+            imageLoader.src = url;
         };
         OstrioWebAnalytics.prototype.initAutoTracking = function () {
             var _this = this;
@@ -278,8 +281,9 @@
                     }
                 }
                 if (typeof prev === 'function') {
-                    prev.call(window, msg, url, line, column, error);
+                    return prev.call(window, msg, url, line, column, error);
                 }
+                return undefined;
             });
             window.onerror = handler;
             this.eventRemovers.push(function () {
@@ -322,6 +326,17 @@
                 }
             }
             return false;
+        };
+        OstrioWebAnalytics.prototype.isExternalReferrer = function (referrer) {
+            if (!referrer.trim()) {
+                return false;
+            }
+            try {
+                return new URL(referrer).origin !== this.loc.origin;
+            }
+            catch (_err) {
+                return true;
+            }
         };
         OstrioWebAnalytics.prototype.getCurrentUrl = function () {
             var _this = this;

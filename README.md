@@ -28,7 +28,7 @@
   - [Hash & query tracking controls](#hash--query-tracking-controls)
 - [Examples](#examples)
   - [Google Analytics integration](#google-analytics-integration)
-  - [Google Tag Manager integration](#google-tag-manager-integration)
+  - [Google tag integration](#google-tag-integration)
 - [Opt-out for end-users](#opt-out-for-end-users)
 
 ## Why ostr.io analytics?
@@ -186,14 +186,14 @@ interface OstrioWebAnalyticsConfig {
 > [!IMPORTANT]
 > Constructor throws `Error('[init] {{trackingId}} is missing or incorrect!')` if the `trackingId` is not a 17-char string
 
-- `trackingId` {*string*} - [Required] Website' identifier. To obtain `trackingId` go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
+- `trackingId` {*string*} - [Required] Website identifier. To obtain `trackingId`, go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
 - `options` - {*OstrioWebAnalyticsConfig*} - [Optional]
 - `options.auto` - {*boolean*} - Set to `false` to disable automated page navigation tracking
-- `options.trackErrors` - {*boolean*} - Set to `false` to disable automated page-level JS errors and exceptions tracking
-- `options.trackHash` - {*boolean*} - Set to `false` to disable automated tracking of changes in `#hash` of the page; All reported URLs will have hash omitted
-- `options.trackQuery` - {*boolean*} - Set to `false` to disable tracking changes in get query `?get=query`; All reported URLs will have get-query omitted
+- `options.trackErrors` - {*boolean*} - Set to `false` to disable automated tracking of page-level JS errors and exceptions
+- `options.trackHash` - {*boolean*} - Set to `false` to disable automated tracking of changes in `#hash` of the page; all reported URLs will have hash omitted
+- `options.trackQuery` - {*boolean*} - Set to `false` to disable tracking changes in GET query `?get=query`; all reported URLs will have GET query omitted
 - `options.ignoredQueries` - {*string[]*} - Array of case-**insensitive** query keys to exclude from analytics tracking
-- `options.ignoredPaths` - {*(string|RegExp)[]*} - Array of case-**sensitive** paths and RegExp with URI paths that will be ignored and excluded from web analytics; Use `/*` to define "beginning" or the path; Use to exclude "service" URLs from tracking like `/admin/*`; Examples: `['/path/starts/with/*', '/exact-path/', /^\/category\/[0-9a-zA-Z]{10}\/?$/]`
+- `options.ignoredPaths` - {*(string|RegExp)[]*} - Array of case-**sensitive** paths and RegExp with URI paths that will be ignored and excluded from web analytics; use `/*` to define the beginning of the path; use to exclude "service" URLs from tracking like `/admin/*`; examples: `['/path/starts/with/*', '/exact-path/', /^\/category\/[0-9a-zA-Z]{10}\/?$/]`
 - `options.transport` - {*'fetch' | 'beacon' | 'img'*} - Set preferred transport; Default: `fetch`
 
 > [!TIP]
@@ -509,11 +509,11 @@ analyticsTracker.onPushEvent((name, value) => {
 
 ---
 
-### Google Tag Manager integration
+### Google tag integration
 
-Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking-data to Google Tag Manager upon navigation or event.
+Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking data to Google tag upon navigation or event.
 
-In page's `<head>` add Google Tag Manager as instructed:
+In page's `<head>` add Google tag as instructed:
 
 ```html
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>

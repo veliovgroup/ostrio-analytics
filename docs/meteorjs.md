@@ -28,7 +28,7 @@ Import from Atmosphere package
 
 ```js
 import Analytics from 'meteor/ostrio:analytics';
-const analyticsTracker = new Analytics('trackingId');
+const analyticsTracker = new Analytics('{{trackingId}}');
 ```
 
 ### Meteor/NPM
@@ -41,7 +41,7 @@ Import from NPM package
 
 ```js
 import Analytics from 'ostrio-analytics';
-const analyticsTracker = new Analytics('trackingId');
+const analyticsTracker = new Analytics('{{trackingId}}');
 ```
 
 #### TypeScript
@@ -55,7 +55,7 @@ const config: OstrioWebAnalyticsConfig = {
   transport: 'fetch'
 };
 
-const analyticsTracker = new Analytics('trackingId', config);
+const analyticsTracker = new Analytics('{{trackingId}}', config);
 ```
 
 #### Require
@@ -63,5 +63,5 @@ const analyticsTracker = new Analytics('trackingId', config);
 Require from NPM package
 
 ```js
-const analyticsTracker = new (require('ostrio-analytics'))('trackingId');
+const analyticsTracker = new (require('ostrio-analytics'))('{{trackingId}}');
 ```
