@@ -7,11 +7,13 @@
 .meteorignore
 .npm
 .versions
-docs
+docs/superpowers
 test
 node_modules
 npm-debug.log*
 package.js
 eslint.config.mjs
 rollup.config.mjs
+tsconfig.json
 tsconfig.test.json
+tsconfig.types.json

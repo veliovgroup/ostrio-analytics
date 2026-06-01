@@ -7,6 +7,7 @@
 .eslintrc
 docs
 dist
+skills
 test
 eslint.config.mjs
 rollup.config.mjs
@@ -20,4 +21,6 @@ LICENSE
 README.md
 package.json
 package-lock.json
+tsconfig.json
 tsconfig.test.json
+tsconfig.types.json
