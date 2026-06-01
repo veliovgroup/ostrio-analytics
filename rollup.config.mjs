@@ -7,6 +7,7 @@ import terser from '@rollup/plugin-terser';
 const input = 'src/index.ts';
 const umdInput = 'src/umd.ts';
 const banner = '/*! ostrio-analytics v2.0.0 | BSD-3-Clause */';
+const cjsCompatFooter = 'module.exports = Object.assign(exports.default, exports);';
 
 const basePlugins = [
   resolve({ browser: true, preferBuiltins: false }),
@@ -28,7 +29,7 @@ export default [{
   treeshake: true
 }, {
   input,
-  output: { file: 'dist/index.cjs', format: 'cjs', exports: 'named', sourcemap: true, banner },
+  output: { file: 'dist/index.cjs', format: 'cjs', exports: 'named', sourcemap: true, banner, footer: cjsCompatFooter },
   plugins: [
     ...basePlugins,
     typescript({ compilerOptions: { target: 'ES2020', module: 'ESNext' } })

@@ -219,6 +219,17 @@ describe('OstrioWebAnalytics', () => {
     expect(a.transport).to.equal(prev);
   });
 
+  it('destroy() restores window.onerror installed by trackErrors', () => {
+    const previous = (() => undefined) as OnErrorEventHandler;
+    window.onerror = previous;
+
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+    expect(window.onerror).to.not.equal(previous);
+
+    a.destroy();
+    expect(window.onerror).to.equal(previous);
+  });
+
   describe('transports — calls underlying implementation', () => {
     it('uses fetch when transport=Fetch', () => {
       const fetchStub: sinon.SinonStub = (global as any).fetch;

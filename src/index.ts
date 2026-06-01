@@ -6,6 +6,8 @@ export enum Transport {
 
 export const SUPPORTED_TRANSPORTS = [Transport.Fetch, Transport.Beacon, Transport.Img] as const;
 
+export type OstrioWebAnalyticsTransport = Transport | `${Transport}`;
+
 const DEFAULTS = {
   serviceUrl: 'https://analytics.ostr.io/',
   version: 300,
@@ -59,7 +61,7 @@ const WARN = {
 export interface OstrioWebAnalyticsDynamicConfig {
   trackHash?: boolean;
   trackQuery?: boolean;
-  transport?: Transport;
+  transport?: OstrioWebAnalyticsTransport;
   serviceUrl?: string;
 }
 
@@ -143,12 +145,13 @@ export class OstrioWebAnalytics {
     this.setTransport(cfg.transport || this.transport);
   }
 
-  public setTransport(t: Transport): void {
-    if (SUPPORTED_TRANSPORTS.includes(t)) {
-      if (t === Transport.Fetch && typeof fetch !== 'function') {
+  public setTransport(t: OstrioWebAnalyticsTransport): void {
+    const transport = t as Transport;
+    if (SUPPORTED_TRANSPORTS.includes(transport)) {
+      if (transport === Transport.Fetch && typeof fetch !== 'function') {
         this.transport = Transport.Img;
       } else {
-        this.transport = t;
+        this.transport = transport;
       }
     }
   }
@@ -312,7 +315,7 @@ export class OstrioWebAnalytics {
 
   private initGlobalErrors(): void {
     const prev = window.onerror as OnErrorEventHandlerNonNull | null;
-    window.onerror = ((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
+    const handler = ((msg: Event | string, url: string, line: number, column: number, error: Error): void => {
       const m = String(msg || DEFAULTS.globalError.msg);
       const u = String(url || DEFAULTS.globalError.url);
       const ln = String(line || DEFAULTS.globalError.line);
@@ -326,6 +329,13 @@ export class OstrioWebAnalytics {
         prev.call(window, msg, url, line, column, error);
       }
     }) as OnErrorEventHandlerNonNull;
+
+    window.onerror = handler;
+    this.eventRemovers.push((): void => {
+      if (window.onerror === handler) {
+        window.onerror = prev;
+      }
+    });
 
     this.on(window, EventName.UnhandledRejection, (evt: Event): void => {
       const e = evt as PromiseRejectionEvent;

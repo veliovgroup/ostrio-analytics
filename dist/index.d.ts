@@ -4,10 +4,11 @@ export declare enum Transport {
     Img = "img"
 }
 export declare const SUPPORTED_TRANSPORTS: readonly [Transport.Fetch, Transport.Beacon, Transport.Img];
+export type OstrioWebAnalyticsTransport = Transport | `${Transport}`;
 export interface OstrioWebAnalyticsDynamicConfig {
     trackHash?: boolean;
     trackQuery?: boolean;
-    transport?: Transport;
+    transport?: OstrioWebAnalyticsTransport;
     serviceUrl?: string;
 }
 export interface OstrioWebAnalyticsConfig extends OstrioWebAnalyticsDynamicConfig {
@@ -41,7 +42,7 @@ export declare class OstrioWebAnalytics {
     constructor(sid: string, opts?: OstrioWebAnalyticsConfig | boolean);
     private on;
     applySettings(cfg: OstrioWebAnalyticsDynamicConfig): void;
-    setTransport(t: Transport): void;
+    setTransport(t: OstrioWebAnalyticsTransport): void;
     ignorePath(path: string | RegExp): void;
     ignorePaths(paths: Array<string | RegExp>): void;
     ignoreQuery(queryKey: string): void;

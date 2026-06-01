@@ -124,12 +124,13 @@
             this.setTransport(cfg.transport || this.transport);
         };
         OstrioWebAnalytics.prototype.setTransport = function (t) {
-            if (SUPPORTED_TRANSPORTS.includes(t)) {
-                if (t === Transport.Fetch && typeof fetch !== 'function') {
+            var transport = t;
+            if (SUPPORTED_TRANSPORTS.includes(transport)) {
+                if (transport === Transport.Fetch && typeof fetch !== 'function') {
                     this.transport = Transport.Img;
                 }
                 else {
-                    this.transport = t;
+                    this.transport = transport;
                 }
             }
         };
@@ -265,7 +266,7 @@
         OstrioWebAnalytics.prototype.initGlobalErrors = function () {
             var _this = this;
             var prev = window.onerror;
-            window.onerror = (function (msg, url, line, column, error) {
+            var handler = (function (msg, url, line, column, error) {
                 var m = String(msg || DEFAULTS.globalError.msg);
                 var u = String(url || DEFAULTS.globalError.url);
                 var ln = String(line || DEFAULTS.globalError.line);
@@ -275,6 +276,12 @@
                 }
                 if (typeof prev === 'function') {
                     prev.call(window, msg, url, line, column, error);
+                }
+            });
+            window.onerror = handler;
+            this.eventRemovers.push(function () {
+                if (window.onerror === handler) {
+                    window.onerror = prev;
                 }
             });
             this.on(window, EventName.UnhandledRejection, function (evt) {
