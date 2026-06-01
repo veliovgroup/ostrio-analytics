@@ -30,7 +30,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:rollup": "rollup -c",
+    "build:rollup": "rollup -c --forceExit",
     "build": "npm run clean && npm run build:rollup && npm run build:types",
     "prepublishOnly": "npm run build",
     "test": "TS_NODE_PROJECT=tsconfig.test.json node --loader ts-node/esm ./node_modules/mocha/bin/mocha.js --extension ts 'test/**/*.spec.ts'",
