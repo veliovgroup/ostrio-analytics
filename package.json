@@ -34,6 +34,8 @@
     "build": "npm run clean && npm run build:rollup && npm run build:types",
     "prepublishOnly": "npm run build",
     "test": "TS_NODE_PROJECT=tsconfig.test.json node --loader ts-node/esm ./node_modules/mocha/bin/mocha.js --extension ts 'test/**/*.spec.ts'",
+    "test:exports": "node test/exports/esm.mjs && node test/exports/cjs.cjs",
+    "test:types": "tsc -p test/types/tsconfig.node.json && tsc -p test/types/tsconfig.bun.json && tsc -p test/types/tsconfig.meteor.json",
     "lint": "eslint ./src/*"
   },
   "repository": {
