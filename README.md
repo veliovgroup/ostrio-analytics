@@ -214,7 +214,7 @@ analyticsTracker.applySettings(settings: OstrioWebAnalyticsDynamicConfig);
 interface OstrioWebAnalyticsDynamicConfig {
   trackHash?: boolean;
   trackQuery?: boolean;
-  transport?: Transport;
+  transport?: Transport | `${Transport}`;
   serviceUrl?: string;
 }
 
@@ -256,7 +256,7 @@ analyticsTracker.destroy();
 Use `analyticsTracker.pushEvent(key, value)` method to collect and track custom user's events. Custom events are useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
 
 - `key` {*string*} - [Required] The length of the event key must be between 1 and 24 symbols;
-- `value` {*string*} - [Required] The length of the event value must be between 1 and 64 symbols.
+- `value` {*number | string*} - [Required] The length of the event value must be between 1 and 64 symbols.
 
 If the length of `key` or `value` is longer than limits, it will be truncated without throwing an exception.
 
