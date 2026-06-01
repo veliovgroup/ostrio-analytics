@@ -27,7 +27,7 @@
   - [Ignoring queries / search params](#ignoring-queries--search-params)
   - [Hash & query tracking controls](#hash--query-tracking-controls)
 - [Examples](#examples)
-  - [Google Analytics integration](#google-analytics-integration)
+  - [Legacy Google Analytics integration](#legacy-google-analytics-integration)
   - [Google tag integration](#google-tag-integration)
 - [Opt-out for end-users](#opt-out-for-end-users)
 
@@ -336,7 +336,7 @@ History.Adapter.bind(window, 'statechange', () => {
 
 ### Event Callbacks
 
-Use `.onPushEvent()` to hook into [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#track-custom-events). Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
+Use `.onPushEvent()` to hook into [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#track-custom-events). Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#legacy-google-analytics-integration).
 
 Examples:
 
@@ -352,7 +352,7 @@ analyticsTracker.pushEvent('testKey', 'testValue');
 
 ### Tracking Callbacks
 
-Use `.onTrack()` to hook into [`.track()` method](https://github.com/veliovgroup/ostrio-analytics#custom-navigation-tracking) and browser navigation in `{auto: true}` mode. Read how to use this method for deep [Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#google-analytics-integration).
+Use `.onTrack()` to hook into [`.track()` method](https://github.com/veliovgroup/ostrio-analytics#custom-navigation-tracking) and browser navigation in `{auto: true}` mode. Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#legacy-google-analytics-integration).
 
 Examples:
 
@@ -469,7 +469,9 @@ Explore various custom usage examples
 
 ---
 
-### Google Analytics integration
+### Legacy Google Analytics integration
+
+This example is for legacy `analytics.js` / Universal Analytics IDs (`UA-XXXXXXXXX-X`).
 
 Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking-data to Google Analytics upon navigation or event.
 
