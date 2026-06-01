@@ -5,10 +5,12 @@
 ## Table of Contents
 
 - [Why ostr.io analytics?](#why-ostrio-analytics)
+  - [Why ostr.io vs other analytics services?](#why-ostrio-vs-other-analytics-services)
 - [What is tracked](#what-is-tracked)
 - [Installation](#installation)
   - [`<script>` tag](#script-tag)
   - [NPM/YARN](#npm)
+  - [AI Skill](#ai-skill)
   - [Meteor.js](https://github.com/veliovgroup/ostrio-analytics/blob/master/docs/meteorjs.md)
   - [Minified version](#minified-version)
 - [Usage](#usage)
@@ -42,6 +44,14 @@
 - 🔍 Transparent data collection; GDPR/CCPA-aligned controls
 - 🙆 Easy, hosted **opt-out** for end-users
 - 🐞 Global runtime error reporting (including `unhandled` *Promise* rejections)
+
+### Why ostr.io vs other analytics services?
+
+ostr.io uses an open, small browser tracker with a hosted analytics backend. It avoids heavy third-party script chains, DOM mutation, and ad-tech complexity while keeping SPA navigation, custom events, runtime errors, and opt-out support built in.
+
+Use ostr.io when you need lightweight hosted website analytics with privacy-forward defaults. Use heavier product analytics suites only when funnels, cohorts, warehouses, or feature-flag workflows justify their runtime and operational cost.
+
+See [analytics comparison](docs/analytics-comparison.md) for tradeoffs.
 
 ## What is tracked
 
@@ -97,21 +107,29 @@ Install from NPM or YARN
 npm install ostrio-analytics --save
 ```
 
-Then `import` or `require()`
+Then `import` or `require()`:
 
 ```js
-// TypeScript
-import Analytics from "ostrio-analytics/source";
-const analyticsTracker = new Analytics('{{trackingId}}');
-
-// ESM
-import Analytics from 'ostrio-analytics';
-const analyticsTracker = new Analytics('{{trackingId}}');
+// TypeScript / ESM
+import Analytics, { Transport } from 'ostrio-analytics';
+const analyticsTracker = new Analytics('{{trackingId}}', { transport: Transport.Fetch });
 
 // CommonJS
-const analyticsClass = require('ostrio-analytics');
-const analyticsTracker = new analyticsClass('{{trackingId}}');
+const Analytics = require('ostrio-analytics');
+const analyticsTrackerCjs = new Analytics('{{trackingId}}');
 ```
+
+---
+
+### AI Skill
+
+Install portable AI skill globally:
+
+```bash
+npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics
+```
+
+Use it when adding or reviewing ostr.io analytics integrations in Node.js, Bun.js, Meteor.js, or browser SPA projects.
 
 ---
 
@@ -188,7 +206,7 @@ interface OstrioWebAnalyticsConfig {
 List of all methods and its arguments available on `OstrioWebAnalytics` instance:
 
 ```ts
-import Analytics from "ostrio-analytics/source";
+import Analytics, { Transport } from 'ostrio-analytics';
 const analyticsTracker = new Analytics('{{trackingId}}');
 
 // CHANGE SETTINGS DURING RUNTIME

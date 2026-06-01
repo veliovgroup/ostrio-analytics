@@ -4,7 +4,7 @@ How to install and use analytics by ostr.io within Meteor.js project
 
 ## Installation
 
-Install via Atmosphere or as NPM packeage
+Install via Atmosphere or as NPM package
 
 ### Meteor via Atmosphere:
 
@@ -42,6 +42,20 @@ Import from NPM package
 ```js
 import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId');
+```
+
+### TypeScript
+
+```ts
+import Analytics, { type OstrioWebAnalyticsConfig } from 'ostrio-analytics';
+
+const config: OstrioWebAnalyticsConfig = {
+  auto: true,
+  trackErrors: true,
+  transport: 'fetch'
+};
+
+const analyticsTracker = new Analytics('trackingId', config);
 ```
 
 #### Require
