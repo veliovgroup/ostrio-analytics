@@ -44,7 +44,7 @@ import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('trackingId');
 ```
 
-### TypeScript
+#### TypeScript
 
 ```ts
 import Analytics, { type OstrioWebAnalyticsConfig } from 'ostrio-analytics';
