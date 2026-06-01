@@ -259,6 +259,17 @@ describe('OstrioWebAnalytics', () => {
     a.destroy();
   });
 
+  it('does not report global errors from external source URLs containing current origin in query string', () => {
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
+    const fetchStub: sinon.SinonStub = (global as any).fetch;
+    fetchStub.resetHistory();
+
+    (window.onerror as OnErrorEventHandlerNonNull)('boom', `https://example.com/app.js?next=${window.location.origin}/app.js`, 1, 2, new Error('boom'));
+
+    expect(fetchStub.callCount).to.equal(0);
+    a.destroy();
+  });
+
   it('destroyed error handler does not report through later handler chains', () => {
     const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: true });
     const fetchStub: sinon.SinonStub = (global as any).fetch;
@@ -310,6 +321,48 @@ describe('OstrioWebAnalytics', () => {
       if (beaconStub) { expect(beaconStub.callCount).to.equal(1); }
       expect(fetchStub.callCount).to.equal(0);
       expect(images.length).to.equal(0);
+    });
+
+    it('falls back to fetch when transport=Beacon and sendBeacon returns false', () => {
+      const fetchStub: sinon.SinonStub = (global as any).fetch;
+      const images: any[] = (global as any).__images;
+      fetchStub.resetHistory();
+      if (beaconStub && beaconStub.restore) { beaconStub.restore(); }
+      Object.defineProperty(globalThis.navigator, 'sendBeacon', {
+        value: sinon.stub().returns(false),
+        configurable: true
+      });
+      images.length = 0;
+
+      const a = new (Analytics as any)(VALID_ID, { auto: false, transport: Transport.Beacon });
+      a.track();
+      clock.tick(70);
+
+      expect((globalThis.navigator.sendBeacon as sinon.SinonStub).callCount).to.equal(1);
+      expect(fetchStub.callCount).to.equal(1);
+      expect(images.length).to.equal(0);
+    });
+
+    it('falls back to Image when transport=Beacon returns false and fetch is unavailable', () => {
+      const savedFetch = (global as any).fetch;
+      const images: any[] = (global as any).__images;
+      (global as any).fetch = undefined;
+      if (beaconStub && beaconStub.restore) { beaconStub.restore(); }
+      Object.defineProperty(globalThis.navigator, 'sendBeacon', {
+        value: sinon.stub().returns(false),
+        configurable: true
+      });
+      images.length = 0;
+
+      const a = new (Analytics as any)(VALID_ID, { auto: false, transport: Transport.Beacon });
+      a.track();
+      clock.tick(70);
+
+      expect((globalThis.navigator.sendBeacon as sinon.SinonStub).callCount).to.equal(1);
+      expect(images.length).to.equal(1);
+      expect((images[0] as any).__src.includes('.gif?')).to.equal(true);
+
+      (global as any).fetch = savedFetch;
     });
 
     it('falls back to fetch when transport=Beacon but sendBeacon is unavailable', () => {

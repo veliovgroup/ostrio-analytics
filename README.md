@@ -95,7 +95,7 @@ To get your `trackingId`, open the [Analytics](https://ostr.io/service/analytics
 
 > [!IMPORTANT]
 > When tracking code is loaded from `analytics.ostr.io` via script-tag it will automatically execute in "auto" mode and will be available in the global scope as `OstrioTracker`.
-> Example: `OstrioTracker.pushEvent(foo, bar);`
+> Example: `OstrioTracker.pushEvent('foo', 'bar');`
 
 ---
 
@@ -426,7 +426,7 @@ const analyticsTracker = new Analytics('{{trackingId}}', {
 > [!NOTE]
 > Note: Referral source is tracked via HTTP headers
 
-Remove noisy query keys (case-insensitive) from URL change detection and payload. Use `.ignoreQuery()` or `.ignoreQueries()` to add ignored paths during runtime:
+Remove noisy query keys (case-insensitive) from URL change detection and payload. Use `.ignoreQuery()` or `.ignoreQueries()` to add ignored queries during runtime:
 
 ```js
 analyticsTracker.ignoreQuery('utm');
@@ -516,7 +516,7 @@ Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#trac
 In page's `<head>` add Google tag as instructed:
 
 ```html
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script type='text/javascript'>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -529,8 +529,8 @@ import Analytics from 'ostrio-analytics';
 const analyticsTracker = new Analytics('{{trackingId}}');
 
 analyticsTracker.onTrack(() => {
-  // Track navigation with Google Analytics
-  gtag('config', 'UA-XXXXXXXXX-X', {
+  // Track navigation with Google tag
+  gtag('config', 'G-XXXXXXXXXX', {
     page_title: document.title,
     page_path: document.location.pathname,
     page_location: document.location.href
@@ -538,7 +538,7 @@ analyticsTracker.onTrack(() => {
 });
 
 analyticsTracker.onPushEvent((name, value) => {
-  // Send events to Google Analytics
+  // Send events to Google tag
   gtag('event', name, { value });
 });
 ```

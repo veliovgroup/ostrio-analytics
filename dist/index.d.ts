@@ -56,6 +56,7 @@ export declare class OstrioWebAnalytics {
     private sendImage;
     private initAutoTracking;
     private initGlobalErrors;
+    private parseSameOriginUrl;
     private isIgnored;
     private isExternalReferrer;
     private getCurrentUrl;

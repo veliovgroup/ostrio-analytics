@@ -274,9 +274,10 @@ export class OstrioWebAnalytics {
     const url = `${this.serviceUrl}${this.sid}.gif?${query.toString()}`;
 
     if (this.transport === Transport.Beacon && typeof navigator.sendBeacon === 'function') {
-      navigator.sendBeacon(url);
-      cb();
-      return;
+      if (navigator.sendBeacon(url)) {
+        cb();
+        return;
+      }
     }
 
     if (this.transport === Transport.Img || typeof fetch !== 'function') {
@@ -326,9 +327,10 @@ export class OstrioWebAnalytics {
         const u = String(url || DEFAULTS.globalError.url);
         const ln = String(line || DEFAULTS.globalError.line);
         const col = String(column || DEFAULTS.globalError.column);
+        const source = this.parseSameOriginUrl(u);
 
-        if (u.includes(this.loc.origin)) {
-          this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${u.replace(this.loc.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+        if (source) {
+          this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${source.href.replace(source.origin, '')} at ${this.loc.href}:${ln}:${col}`);
         }
       }
 
@@ -352,6 +354,15 @@ export class OstrioWebAnalytics {
       const v = (e && typeof e.reason === 'object' && e.reason && 'message' in e.reason) ? String(e.reason.message) : String(e?.reason ?? 'Undefined Rejection Reason');
       this.pushEvent(EventName.GlobalError, `Unhandled Rejection: ${v}. At: ${this.loc.href}`);
     });
+  }
+
+  private parseSameOriginUrl(url: string): URL | null {
+    try {
+      const source = new URL(url);
+      return source.origin === this.loc.origin ? source : null;
+    } catch (_err) {
+      return null;
+    }
   }
 
   private isIgnored(pathname: string): boolean {

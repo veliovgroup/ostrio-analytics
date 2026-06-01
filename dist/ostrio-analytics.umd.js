@@ -231,9 +231,10 @@
             var _this = this;
             var url = "".concat(this.serviceUrl).concat(this.sid, ".gif?").concat(query.toString());
             if (this.transport === Transport.Beacon && typeof navigator.sendBeacon === 'function') {
-                navigator.sendBeacon(url);
-                cb();
-                return;
+                if (navigator.sendBeacon(url)) {
+                    cb();
+                    return;
+                }
             }
             if (this.transport === Transport.Img || typeof fetch !== 'function') {
                 this.sendImage(url);
@@ -276,8 +277,9 @@
                     var u = String(url || DEFAULTS.globalError.url);
                     var ln = String(line || DEFAULTS.globalError.line);
                     var col = String(column || DEFAULTS.globalError.column);
-                    if (u.includes(_this.loc.origin)) {
-                        _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(u.replace(_this.loc.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
+                    var source = _this.parseSameOriginUrl(u);
+                    if (source) {
+                        _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(source.href.replace(source.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
                     }
                 }
                 if (typeof prev === 'function') {
@@ -298,6 +300,15 @@
                 var v = (e && typeof e.reason === 'object' && e.reason && 'message' in e.reason) ? String(e.reason.message) : String((_a = e === null || e === void 0 ? void 0 : e.reason) !== null && _a !== void 0 ? _a : 'Undefined Rejection Reason');
                 _this.pushEvent(EventName.GlobalError, "Unhandled Rejection: ".concat(v, ". At: ").concat(_this.loc.href));
             });
+        };
+        OstrioWebAnalytics.prototype.parseSameOriginUrl = function (url) {
+            try {
+                var source = new URL(url);
+                return source.origin === this.loc.origin ? source : null;
+            }
+            catch (_err) {
+                return null;
+            }
         };
         OstrioWebAnalytics.prototype.isIgnored = function (pathname) {
             if (!this.ignoredPaths.size) {
