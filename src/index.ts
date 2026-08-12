@@ -127,7 +127,7 @@ export class OstrioWebAnalytics {
 
     this.applySettings(cfg);
 
-    if (!this.sid || typeof this.sid !== 'string' || this.sid.length !== 17) {
+    if (!this.sid || typeof this.sid !== 'string' || !/^[A-Za-z0-9]{17}$/.test(this.sid)) {
       throw new Error(WARN.sidError);
     }
 
@@ -226,6 +226,12 @@ export class OstrioWebAnalytics {
       value = value.trim().slice(0, LIMITS.errorValue);
       if (this.cachedErrors.has(value)) {
         return;
+      }
+      if (this.cachedErrors.size >= 256) {
+        const oldest = this.cachedErrors.values().next().value;
+        if (oldest !== undefined) {
+          this.cachedErrors.delete(oldest);
+        }
       }
       this.cachedErrors.add(value);
     } else {
@@ -351,7 +357,7 @@ export class OstrioWebAnalytics {
         const source = this.parseSameOriginUrl(u);
 
         if (source) {
-          this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${source.href.replace(source.origin, '')} at ${this.loc.href}:${ln}:${col}`);
+          this.pushEvent(EventName.GlobalError, `Error: ${m}. File: ${source.href.replace(source.origin, '')} at ${this.getCurrentUrl()}:${ln}:${col}`);
         }
       }
 
@@ -374,7 +380,7 @@ export class OstrioWebAnalytics {
     this.on(window, EventName.UnhandledRejection, (evt: Event): void => {
       const e = evt as PromiseRejectionEvent;
       const v = (e && typeof e.reason === 'object' && e.reason && 'message' in e.reason) ? String(e.reason.message) : String(e?.reason ?? 'Undefined Rejection Reason');
-      this.pushEvent(EventName.GlobalError, `Unhandled Rejection: ${v}. At: ${this.loc.href}`);
+      this.pushEvent(EventName.GlobalError, `Unhandled Rejection: ${v}. At: ${this.getCurrentUrl()}`);
     });
   }
 
@@ -451,6 +457,7 @@ export class OstrioWebAnalytics {
       this.eventRemovers[i]?.();
     }
     this.eventRemovers.length = 0;
+    this.cachedErrors.clear();
     if (this.autoTimer) {
       clearInterval(this.autoTimer);
       this.autoTimer = null;

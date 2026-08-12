@@ -29,7 +29,8 @@
 - [Examples](#examples)
   - [Legacy Google Analytics integration](#legacy-google-analytics-integration)
   - [Google tag integration](#google-tag-integration)
-- [Opt-out for end-users](#opt-out-for-end-users)
+- [Compliance](#compliance)
+  - [Opt-out for end-users](#opt-out-for-end-users)
 
 ## Why ostr.io analytics?
 
@@ -184,9 +185,9 @@ interface OstrioWebAnalyticsConfig {
 ```
 
 > [!IMPORTANT]
-> Constructor throws `Error('[init] {{trackingId}} is missing or incorrect!')` if the `trackingId` is not a 17-char string
+> Constructor throws `Error('[init] {{trackingId}} is missing or incorrect!')` if the `trackingId` is not a 17-character alphanumeric string (`A–Z`, `a–z`, `0–9`)
 
-- `trackingId` {*string*} - [Required] Website identifier. To obtain `trackingId`, go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
+- `trackingId` {*string*} - [Required] Website identifier (exactly 17 alphanumeric characters). To obtain `trackingId`, go to [Analytics](https://ostr.io/service/analytics) section and select a domain name;
 - `options` - {*OstrioWebAnalyticsConfig*} - [Optional]
 - `options.auto` - {*boolean*} - Set to `false` to disable automated page navigation tracking
 - `options.trackErrors` - {*boolean*} - Set to `false` to disable automated tracking of page-level JS errors and exceptions
@@ -254,6 +255,9 @@ analyticsTracker.destroy();
 ### Track Custom Events
 
 Use `analyticsTracker.pushEvent(key, value)` method to collect and track custom user's events. Custom events are useful for tracking certain activity on your website, like clicks, form submits and others user's behaviors.
+
+> [!NOTE]
+> `pushEvent()` and automatic runtime error reports do **not** honor `ignoredPaths`. Path ignores apply to pageviews (`track()` / auto navigation) only. Error payloads do honor `ignoredQueries` / `trackQuery` / `trackHash` via the same URL scrubbing as pageviews.
 
 - `key` {*string*} - [Required] The length of the event key must be between 1 and 24 symbols;
 - `value` {*number | string*} - [Required] The length of the event value must be between 1 and 64 symbols.
@@ -381,8 +385,8 @@ Explore advanced settings and its usage
 
 ### Transports
 
-- `{ transport: 'beacon' }` – uses `navigator.sendBeacon` when available (best for unload/background sends, but commonly blocked by browsers)
-- `{ transport: 'fetch' }` (default) – uses `fetch` with `{ mode: 'no-cors', cache: 'no-store' }`
+- `{ transport: 'beacon' }` – uses `navigator.sendBeacon` (HTTP POST) to `{{serviceUrl}}{{trackingId}}.gif?…` when available (best for unload/background sends, but commonly blocked by browsers)
+- `{ transport: 'fetch' }` (default) – uses `fetch` with `{ credentials: 'include', mode: 'no-cors', cache: 'no-store' }`
 - `{ transport: 'img' }` – legacy image-pixel transport for top compatibility with various browsers
 
 ```js
@@ -396,7 +400,7 @@ analyticsTracker.setTransport('beacon');
 
 ### Ignoring paths
 
-Exclude paths from tracking with exact match, prefix, or RegExp. Use `.ignorePath()` or `.ignorePaths()` to add ignored paths during runtime:
+Exclude paths from **pageview** tracking with exact match, prefix, or RegExp. Use `.ignorePath()` or `.ignorePaths()` to add ignored paths during runtime:
 
 ```js
 analyticsTracker.ignorePath('/admin/*');
@@ -406,6 +410,9 @@ analyticsTracker.ignorePath(/^\/_next\//i);
 // OR ADD ALL AS ARRAY IN ONE CALL
 analyticsTracker.ignorePaths(['/admin/*', '/payment/status/complete']);
 ```
+
+> [!NOTE]
+> `ignoredPaths` apply only to pageviews. Custom events via `.pushEvent()` and automatic error reports are still sent on ignored paths (often intentional for admin/app flows).
 
 Use `ignoredPaths` as part of the *Constructor* config object:
 

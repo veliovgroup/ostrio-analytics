@@ -106,7 +106,7 @@
             cfg.ignoredQueries && this.ignoreQueries(cfg.ignoredQueries);
             cfg.ignoredPaths && this.ignorePaths(cfg.ignoredPaths);
             this.applySettings(cfg);
-            if (!this.sid || typeof this.sid !== 'string' || this.sid.length !== 17) {
+            if (!this.sid || typeof this.sid !== 'string' || !/^[A-Za-z0-9]{17}$/.test(this.sid)) {
                 throw new Error(WARN.sidError);
             }
             if (this.auto) {
@@ -188,6 +188,12 @@
                 value = value.trim().slice(0, LIMITS.errorValue);
                 if (this.cachedErrors.has(value)) {
                     return;
+                }
+                if (this.cachedErrors.size >= 256) {
+                    var oldest = this.cachedErrors.values().next().value;
+                    if (oldest !== undefined) {
+                        this.cachedErrors.delete(oldest);
+                    }
                 }
                 this.cachedErrors.add(value);
             }
@@ -293,7 +299,7 @@
                     var col = String(column || DEFAULTS.globalError.column);
                     var source = _this.parseSameOriginUrl(u);
                     if (source) {
-                        _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(source.href.replace(source.origin, ''), " at ").concat(_this.loc.href, ":").concat(ln, ":").concat(col));
+                        _this.pushEvent(EventName.GlobalError, "Error: ".concat(m, ". File: ").concat(source.href.replace(source.origin, ''), " at ").concat(_this.getCurrentUrl(), ":").concat(ln, ":").concat(col));
                     }
                 }
                 if (typeof state.previous === 'function') {
@@ -313,7 +319,7 @@
                 var _a;
                 var e = evt;
                 var v = (e && typeof e.reason === 'object' && e.reason && 'message' in e.reason) ? String(e.reason.message) : String((_a = e === null || e === void 0 ? void 0 : e.reason) !== null && _a !== void 0 ? _a : 'Undefined Rejection Reason');
-                _this.pushEvent(EventName.GlobalError, "Unhandled Rejection: ".concat(v, ". At: ").concat(_this.loc.href));
+                _this.pushEvent(EventName.GlobalError, "Unhandled Rejection: ".concat(v, ". At: ").concat(_this.getCurrentUrl()));
             });
         };
         OstrioWebAnalytics.prototype.parseSameOriginUrl = function (url) {
@@ -388,6 +394,7 @@
                 (_b = (_a = this.eventRemovers)[i]) === null || _b === void 0 ? void 0 : _b.call(_a);
             }
             this.eventRemovers.length = 0;
+            this.cachedErrors.clear();
             if (this.autoTimer) {
                 clearInterval(this.autoTimer);
                 this.autoTimer = null;
