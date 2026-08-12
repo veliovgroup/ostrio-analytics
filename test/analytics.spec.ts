@@ -72,6 +72,11 @@ describe('OstrioWebAnalytics', () => {
     expect(() => new (Analytics as any)('bad-id')).to.throw('[init] {{trackingId}} is missing or incorrect!');
   });
 
+  it('throws on tracking id with invalid charset', () => {
+    expect(() => new (Analytics as any)('!!!!!!!!!!!!!!!')).to.throw('[init] {{trackingId}} is missing or incorrect!');
+    expect(() => new (Analytics as any)('abcdefg/hij?kl#m')).to.throw('[init] {{trackingId}} is missing or incorrect!');
+  });
+
   it('constructs with auto:false and does not auto-track', () => {
     const a = new (Analytics as any)(VALID_ID, { auto: false });
     expect(a).to.be.instanceOf(Analytics);
@@ -288,6 +293,46 @@ describe('OstrioWebAnalytics', () => {
 
     expect(fetchStub.callCount).to.equal(0);
     a.destroy();
+  });
+
+  it('scrubs ignored query keys from global error URL payload', () => {
+    const a = new (Analytics as any)(VALID_ID, {
+      auto: false,
+      trackErrors: true,
+      ignoredQueries: ['utm_source']
+    });
+    const fetchStub: sinon.SinonStub = (global as any).fetch;
+    fetchStub.resetHistory();
+
+    (window.onerror as OnErrorEventHandlerNonNull)('boom', `${window.location.origin}/app.js`, 1, 2, new Error('boom'));
+    clock.tick(70);
+
+    expect(fetchStub.callCount).to.equal(1);
+    const sentUrl = String(fetchStub.firstCall.args[0]);
+    const eventPayload = JSON.parse(getQueryFromUrl(sentUrl).get('3') || '{}');
+    const errorValue = eventPayload['[Global Error]'] as string;
+    expect(errorValue).to.include('at https://ostr.io/page?b=2#hash:');
+    expect(errorValue).to.not.include('utm_source');
+    a.destroy();
+  });
+
+  it('destroy() clears cachedErrors and caps cache at 256', () => {
+    const a = new (Analytics as any)(VALID_ID, { auto: false, trackErrors: false });
+    const cachedErrors = (a as any).cachedErrors as Set<string>;
+
+    for (let i = 0; i < 256; i++) {
+      a.pushEvent('[Global Error]', `err-${i}`);
+    }
+    expect(cachedErrors.size).to.equal(256);
+    expect(cachedErrors.has('err-0')).to.equal(true);
+
+    a.pushEvent('[Global Error]', 'err-256');
+    expect(cachedErrors.size).to.equal(256);
+    expect(cachedErrors.has('err-0')).to.equal(false);
+    expect(cachedErrors.has('err-256')).to.equal(true);
+
+    a.destroy();
+    expect(cachedErrors.size).to.equal(0);
   });
 
   it('destroyed error handler does not report through later handler chains', () => {

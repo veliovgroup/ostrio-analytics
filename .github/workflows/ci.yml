@@ -29,3 +29,12 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Test exports
+        run: npm run test:exports
+
+      - name: Test types
+        run: npm run test:types
