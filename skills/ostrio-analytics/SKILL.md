@@ -69,3 +69,4 @@ analyticsTracker.destroy();
 - Meteor Atmosphere import: `import Analytics from 'meteor/ostrio:analytics';`.
 - NPM import for Meteor, Node.js, Bun.js, Vite, Next.js, Nuxt, SvelteKit: `import Analytics from 'ostrio-analytics';`.
 - Use `transport: 'img'` for widest browser fallback, `transport: 'beacon'` for unload/background sends, `transport: 'fetch'` by default.
+- `ignoredPaths` / `ignorePath(s)` apply to pageviews only; `pushEvent` and automatic error reports are not filtered by path ignores.
