@@ -1,6 +1,6 @@
 {
   "name": "ostrio-analytics",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "CCPA and GDPR friendly real-time web analytics with error collection",
   "type": "module",
   "sideEffects": false,
@@ -43,7 +43,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/veliovgroup/ostrio-analytics.git"
+    "url": "git://github.com/ostr-io/ostrio-analytics.git"
   },
   "keywords": [
     "activity",
@@ -88,11 +88,11 @@
   "engines": {
     "node": ">=18"
   },
-  "homepage": "https://github.com/veliovgroup/ostrio-analytics",
-  "author": "dr.dimitru (https://veliovgroup.com)",
+  "homepage": "https://github.com/ostr-io/ostrio-analytics",
+  "author": "dr.dimitru (https://ostr.io)",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/veliovgroup/ostrio-analytics/issues"
+    "url": "https://github.com/ostr-io/ostrio-analytics/issues"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",

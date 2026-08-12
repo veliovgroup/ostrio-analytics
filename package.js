@@ -1,8 +1,8 @@
 Package.describe({
   name: 'ostrio:analytics',
-  version: '2.0.0',
+  version: '2.0.1',
   summary: 'CCPA and GDPR friendly real-time web analytics with error collection',
-  git: 'https://github.com/veliovgroup/ostrio-analytics',
+  git: 'https://github.com/ostr-io/ostrio-analytics',
   documentation: 'README.md'
 });
 
