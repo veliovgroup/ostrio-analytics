@@ -22,6 +22,7 @@
   "jsdelivr": "dist/ostrio-analytics.min.js",
   "files": [
     "dist",
+    "!dist/**/*.map",
     "src",
     "docs/*.md",
     "skills",

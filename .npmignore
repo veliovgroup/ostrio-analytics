@@ -1,4 +1,5 @@
 *.md
+*.map
 .DS_Store
 .eslintcache
 .eslintrc
