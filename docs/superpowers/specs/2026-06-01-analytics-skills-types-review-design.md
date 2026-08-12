@@ -9,7 +9,7 @@ Add portable AI skill support and complete TypeScript package usability checks f
 ## Scope
 
 - Add one condensed portable skill at `skills/ostrio-analytics/SKILL.md`.
-- Document skill installation with `npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics`.
+- Document skill installation with `npx skills add ostr-io/ostrio-analytics -g --skill ostrio-analytics`.
 - Keep README compact and example-driven.
 - Move deeper service-comparison and platform notes into `docs/*.md`.
 - Verify and fix TypeScript declarations, exports, and import/require usability.

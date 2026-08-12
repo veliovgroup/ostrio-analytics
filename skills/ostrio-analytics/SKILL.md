@@ -16,7 +16,7 @@ npm install ostrio-analytics --save
 AI skill:
 
 ```bash
-npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics
+npx skills add ostr-io/ostrio-analytics -g --skill ostrio-analytics
 ```
 
 Meteor:

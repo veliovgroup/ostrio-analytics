@@ -424,7 +424,7 @@ npm install ostrio-analytics --save
 AI skill:
 
 ```bash
-npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics
+npx skills add ostr-io/ostrio-analytics -g --skill ostrio-analytics
 ```
 
 Meteor:
@@ -549,7 +549,7 @@ After NPM installation section or before Minified version, add:
 Install portable AI skill globally:
 
 ```bash
-npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics
+npx skills add ostr-io/ostrio-analytics -g --skill ostrio-analytics
 ```
 
 Use it when adding or reviewing ostr.io analytics integrations in Node.js, Bun.js, Meteor.js, or browser SPA projects.

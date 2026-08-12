@@ -11,7 +11,7 @@
   - [`<script>` tag](#script-tag)
   - [NPM/YARN](#npm)
   - [AI Skill](#ai-skill)
-  - [Meteor.js](https://github.com/veliovgroup/ostrio-analytics/blob/master/docs/meteorjs.md)
+  - [Meteor.js](https://github.com/ostr-io/ostrio-analytics/blob/master/docs/meteorjs.md)
   - [Minified version](#minified-version)
 - [Usage](#usage)
   - [Constructor: `new Analytics()`](#constructor)
@@ -40,8 +40,8 @@
 - 😎 No DOM mutations; no heavy CPU tasks; no extra script chains
 - 📡 Supports various transports: `fetch`, `img`, `beacon`; falls back gracefully
 - 🤝 SPA-friendly: HTML5 History API and navigation events support out-of-the-box
-- ⚡️ [AMP tracking](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md)
-- 🛑 [AdBlock detection](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md)
+- ⚡️ [AMP tracking](https://github.com/ostr-io/ostrio/blob/master/docs/analytics/track-amp.md)
+- 🛑 [AdBlock detection](https://github.com/ostr-io/ostrio/blob/master/docs/analytics/detect-adblock.md)
 - 🔍 Transparent data collection; GDPR/CCPA-aligned controls
 - 🙆 Easy, hosted **opt-out** for end-users
 - 🐞 Global runtime error reporting (including `unhandled` *Promise* rejections)
@@ -127,7 +127,7 @@ const analyticsTrackerCjs = new Analytics('{{trackingId}}');
 Install portable AI skill globally:
 
 ```bash
-npx skills add veliovgroup/ostrio-analytics -g --skill ostrio-analytics
+npx skills add ostr-io/ostrio-analytics -g --skill ostrio-analytics
 ```
 
 Use it when adding or reviewing ostr.io analytics integrations in Node.js, Bun.js, Meteor.js, or browser SPA projects.
@@ -297,7 +297,7 @@ analyticsTracker.pushEvent('click', 'pricing - more info');
 </form>
 ```
 
-In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/veliovgroup/ostrio/blob/master/docs/analytics/track-amp.md).
+In a similar way using `.pushEvent` you can detect and track [AdBlock usage](https://github.com/ostr-io/ostrio/blob/master/docs/analytics/detect-adblock.md) and [Accelerated Mobile Pages (AMP)](https://github.com/ostr-io/ostrio/blob/master/docs/analytics/track-amp.md).
 
 ---
 
@@ -340,7 +340,7 @@ History.Adapter.bind(window, 'statechange', () => {
 
 ### Event Callbacks
 
-Use `.onPushEvent()` to hook into [`.pushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#track-custom-events). Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#legacy-google-analytics-integration).
+Use `.onPushEvent()` to hook into [`.pushEvent()` method](https://github.com/ostr-io/ostrio-analytics#track-custom-events). Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/ostr-io/ostrio-analytics#legacy-google-analytics-integration).
 
 Examples:
 
@@ -356,7 +356,7 @@ analyticsTracker.pushEvent('testKey', 'testValue');
 
 ### Tracking Callbacks
 
-Use `.onTrack()` to hook into [`.track()` method](https://github.com/veliovgroup/ostrio-analytics#custom-navigation-tracking) and browser navigation in `{auto: true}` mode. Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/veliovgroup/ostrio-analytics#legacy-google-analytics-integration).
+Use `.onTrack()` to hook into [`.track()` method](https://github.com/ostr-io/ostrio-analytics#custom-navigation-tracking) and browser navigation in `{auto: true}` mode. Read how to use this method for deep [Legacy Google Analytics integration](https://github.com/ostr-io/ostrio-analytics#legacy-google-analytics-integration).
 
 Examples:
 
@@ -480,7 +480,7 @@ Explore various custom usage examples
 
 This example is for legacy `analytics.js` / Universal Analytics IDs (`UA-XXXXXXXXX-X`).
 
-Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking-data to Google Analytics upon navigation or event.
+Using [`.onTrack()` method](https://github.com/ostr-io/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/ostr-io/ostrio-analytics#event-callbacks) we can send tracking-data to Google Analytics upon navigation or event.
 
 In your `<head>` add Google Analytics as instructed:
 
@@ -522,7 +522,7 @@ analyticsTracker.track();
 
 ### Google tag integration
 
-Using [`.onTrack()` method](https://github.com/veliovgroup/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/veliovgroup/ostrio-analytics#event-callbacks) we can send tracking data to Google tag upon navigation or event.
+Using [`.onTrack()` method](https://github.com/ostr-io/ostrio-analytics#tracking-callbacks) and [`.onPushEvent()` method](https://github.com/ostr-io/ostrio-analytics#event-callbacks) we can send tracking data to Google tag upon navigation or event.
 
 In page's `<head>` add Google tag as instructed:
 
